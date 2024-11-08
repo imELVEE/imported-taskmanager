@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:planner_app/pages/login.dart';
 import 'package:planner_app/pages/home.dart';
+import 'package:planner_app/pages/task.dart';
+import 'package:planner_app/pages/project.dart';
 
 class CalendarPage extends StatefulWidget{
   const CalendarPage({super.key});
@@ -74,6 +76,10 @@ class CalendarPageState extends State<CalendarPage> {
       case 0:
         break;
       case 1:
+        _taskPageRoute();
+        break;
+      case 2:
+        _projectPageRoute();
         break;
     }
   }
@@ -89,6 +95,20 @@ class CalendarPageState extends State<CalendarPage> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage())
+    );
+  }
+
+  void _taskPageRoute(){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const TaskPage())
+    );
+  }
+
+  void _projectPageRoute(){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const ProjectPage())
     );
   }
 }

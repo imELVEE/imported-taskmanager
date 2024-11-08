@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:planner_app/pages/login.dart';
+import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/calendar.dart';
 import 'package:planner_app/pages/task.dart';
-import 'package:planner_app/pages/project.dart';
 
-class HomePage extends StatefulWidget{
-  const HomePage({super.key});
+class ProjectPage extends StatefulWidget{
+  const ProjectPage({super.key});
 
   @override
-  HomePageState createState() => HomePageState();
+  ProjectPageState createState() => ProjectPageState();
 }
 
-class HomePageState extends State<HomePage> {
+class ProjectPageState extends State<ProjectPage> {
   int _currentIndex = 0;
 
   @override
@@ -23,7 +23,7 @@ class HomePageState extends State<HomePage> {
 
       body: const Center(
           child: Text(
-            'Home Page',
+            'Project Page',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -38,8 +38,12 @@ class HomePageState extends State<HomePage> {
 
   PreferredSizeWidget _topAppBar(){
     return AppBar(
+      leading: TextButton.icon(
+          onPressed: _homePageRoute,
+          label: const Icon(Icons.home)
+      ),
       backgroundColor: const Color.fromARGB(255, 3, 64, 113),
-      title: const Text('Planner App Home'),
+      title: const Text('Planner App Projects'),
       actions: <Widget>[
         TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
       ],
@@ -75,9 +79,6 @@ class HomePageState extends State<HomePage> {
       case 1:
         _taskPageRoute();
         break;
-      case 2:
-        _projectPageRoute();
-        break;
     }
   }
 
@@ -85,6 +86,13 @@ class HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+  }
+
+  void _homePageRoute(){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage())
     );
   }
 
@@ -99,13 +107,6 @@ class HomePageState extends State<HomePage> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const TaskPage())
-    );
-  }
-
-  void _projectPageRoute(){
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const ProjectPage())
     );
   }
 }
