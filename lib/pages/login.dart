@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:planner_app/pages/calendar.dart';
 import 'package:planner_app/pages/planner.dart';
 import 'package:planner_app/pages/register.dart';
 import 'package:sign_in_button/sign_in_button.dart';
@@ -114,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                    Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Planner()),
+                    MaterialPageRoute(builder: (context) => const CalendarPage()),
                   );
                 },
                  style: ElevatedButton.styleFrom(

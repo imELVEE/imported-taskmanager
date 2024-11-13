@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^3.6.0
   google_sign_in: ^6.2.1
   sign_in_button: ^3.2.0
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -79,7 +80,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+fonts:
+    - family: Jersey10
+      fonts:
+        - asset:/Users/xiaominchen/Desktop/Flutter/planner_app/group-project-two-team-six/lib/assets
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
