@@ -25,9 +25,9 @@ class _MonthcalendarState extends State<Monthcalendar> {
               MaterialPageRoute(builder: (context) => const CalendarPage()),
             );
           },
-          child: const Text('Go to Calendar'),
           style: ElevatedButton.styleFrom(
           ),
+          child: const Text('Go to Calendar'),
         ),
       ),
     );
