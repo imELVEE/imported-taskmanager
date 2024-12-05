@@ -16,7 +16,29 @@ class ProjectPage extends StatefulWidget{
 
 class ProjectPageState extends State<ProjectPage> {
   int _currentIndex = 0;
-  ProjectsList projectList = ProjectsList(key: ValueKey('projectsList'));
+  List<ProjectAssignment> projects = [
+    ProjectAssignment(
+      id: 1,
+      createDate: DateTime.now(),
+      dueDate: DateTime.now().add(const Duration(hours: 24)),
+      subject: 'Flutter Project',
+      notes: 'Do Mobile App',
+    ),
+    ProjectAssignment(
+      id: 2,
+      createDate: DateTime.now().subtract(const Duration(hours: 8)),
+      dueDate: DateTime.now().add(const Duration(hours: 36)),
+      subject: 'Some Project 2',
+    ),
+    ProjectAssignment(
+      id: 3,
+      createDate: DateTime.now().subtract(const Duration(hours: 39)),
+      dueDate: DateTime.now().add(const Duration(hours: 12)),
+      subject: 'Some Project 3',
+      completed: true,
+      notes: 'Do Something.',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context){
@@ -25,47 +47,54 @@ class ProjectPageState extends State<ProjectPage> {
 
       appBar: _topAppBar(),
 
-      body: ProjectsList(key: ValueKey('projectsList')),
+      body: ProjectsList(
+        projects: projects,
+        onProjectUpdated: (project) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return ProjectForm(
+                project: project,
+                onSave: _updateProject,
+              );
+            },
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 23, 84, 140),
-        onPressed: () => _showProjectForm(), // Open form to add new task
-        child: Icon(
-            Icons.add,
-        ),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return ProjectForm(
+                onSave: _addProject,
+              );
+            },
+          );
+        }, // Open form to add new task
+        child: Icon(Icons.add),
       ),
 
       bottomNavigationBar: _bottomNavBar(),
     );
   }
 
-  // Function to handle saving a task (either add or edit)
-  void _saveProject(ProjectAssignment project) {
+  // Add new task to the list
+  void _addProject(ProjectAssignment newProject) {
     setState(() {
-      // If the task has an ID, we update the task, otherwise, we add a new task
-      if (project.id == null) {
-        // If task has no id, it's a new task
-        projectList.projects.add(project);
-      } else {
-        // If task has an id, we update it
-        int index = projectList.projects.indexWhere((p) => p.id == project.id);
-        if (index != -1) {
-         projectList.projects[index] = project;
-        }
-      }
+      projects.add(newProject);
     });
   }
 
-  // Function to show the dialog for adding/editing a task
-  void _showProjectForm({ProjectAssignment? project}) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ProjectForm(
-          project: project,
-          onSave: _saveProject,
-        );
-      },
-    );
+  // Update existing task
+  void _updateProject(ProjectAssignment updatedProject) {
+    setState(() {
+      final index = projects.indexWhere((project) => project.id == updatedProject.id);
+      if (index != -1) {
+        projects[index] = updatedProject;
+      }
+    });
   }
 
   PreferredSizeWidget _topAppBar(){

@@ -3,31 +3,14 @@ import './project_widget.dart';
 import '../classes/project_assignment.dart';
 
 class ProjectsList extends StatelessWidget {
-  final List<ProjectAssignment> projects = [
-    ProjectAssignment(
-      id: 1,
-      createDate: DateTime.now(),
-      dueDate: DateTime.now().add(const Duration(hours: 24)),
-      subject: 'Flutter Project',
-      notes: 'Do Mobile App',
-    ),
-    ProjectAssignment(
-      id: 2,
-      createDate: DateTime.now().subtract(const Duration(hours: 8)),
-      dueDate: DateTime.now().add(const Duration(hours: 36)),
-      subject: 'Some Project 2',
-    ),
-    ProjectAssignment(
-      id: 3,
-      createDate: DateTime.now().subtract(const Duration(hours: 39)),
-      dueDate: DateTime.now().add(const Duration(hours: 12)),
-      subject: 'Some Project 3',
-      completed: true,
-      notes: 'Do Something.',
-    ),
-  ];
+  final Function(ProjectAssignment) onProjectUpdated;
+  final List<ProjectAssignment> projects;
 
-  ProjectsList({Key? key}) : super(key: key);
+  ProjectsList({required this.projects, required this.onProjectUpdated, Key? key}) : super(key: key);
+
+  void addProject(ProjectAssignment project){
+    projects.add(project);
+  }
 
   @override
   Widget build(BuildContext context){
