@@ -3,6 +3,7 @@ import 'package:planner_app/pages/login.dart';
 import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/calendar.dart';
 import 'package:planner_app/pages/task.dart';
+import '../widgets/projects_list.dart';
 
 class ProjectPage extends StatefulWidget{
   const ProjectPage({super.key});
@@ -21,16 +22,7 @@ class ProjectPageState extends State<ProjectPage> {
 
       appBar: _topAppBar(),
 
-      body: const Center(
-          child: Text(
-            'Project Page',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(179, 3, 64, 113),
-            ),
-          )
-      ),
+      body: ProjectsList(key: ValueKey('projectsList')),
 
       bottomNavigationBar: _bottomNavBar(),
     );

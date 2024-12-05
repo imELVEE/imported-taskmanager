@@ -5,7 +5,7 @@ class ProjectAssignment {
   DateTime createDate;
   String subject;
   String? notes;
-  DateTime? dueDate;
+  DateTime dueDate;
 
   DateTime? completeDate;
   bool completed;
@@ -14,13 +14,13 @@ class ProjectAssignment {
   ProjectAssignment({
     required this.id,
     required this.createDate,
+    required this.dueDate,
     required this.subject,
     required this.members,
     this.completed = false,
     this.notes,
-    this.dueDate,
     this.completeDate,
   });
 
-  
+
 }
