@@ -60,6 +60,7 @@ class ProjectPageState extends State<ProjectPage> {
             },
           );
         },
+        onDelete: _deleteProject,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 23, 84, 140),
@@ -94,6 +95,12 @@ class ProjectPageState extends State<ProjectPage> {
       if (index != -1) {
         projects[index] = updatedProject;
       }
+    });
+  }
+
+  void _deleteProject(ProjectAssignment projectToDelete) {
+    setState(() {
+      projects.removeWhere((project) => project.id == projectToDelete.id);
     });
   }
 

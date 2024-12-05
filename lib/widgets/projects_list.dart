@@ -4,9 +4,10 @@ import '../classes/project_assignment.dart';
 
 class ProjectsList extends StatelessWidget {
   final Function(ProjectAssignment) onProjectUpdated;
+  final Function(ProjectAssignment) onDelete;
   List<ProjectAssignment> projects;
 
-  ProjectsList({required this.projects, required this.onProjectUpdated, Key? key}) : super(key: key);
+  ProjectsList({required this.projects, required this.onProjectUpdated, required this.onDelete, Key? key}) : super(key: key);
 
   void addProject(ProjectAssignment project){
     projects.add(project);
@@ -20,6 +21,7 @@ class ProjectsList extends StatelessWidget {
         return ProjectWidget(
             project: projects[index],
             onProjectUpdated: onProjectUpdated,
+            onDelete: onDelete,
             key: ValueKey(projects[index].id),
         );
       },
