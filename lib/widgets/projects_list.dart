@@ -4,7 +4,7 @@ import '../classes/project_assignment.dart';
 
 class ProjectsList extends StatelessWidget {
   final Function(ProjectAssignment) onProjectUpdated;
-  final List<ProjectAssignment> projects;
+  List<ProjectAssignment> projects;
 
   ProjectsList({required this.projects, required this.onProjectUpdated, Key? key}) : super(key: key);
 
@@ -19,6 +19,7 @@ class ProjectsList extends StatelessWidget {
       itemBuilder: (context, index) {
         return ProjectWidget(
             project: projects[index],
+            onProjectUpdated: onProjectUpdated,
             key: ValueKey(projects[index].id),
         );
       },

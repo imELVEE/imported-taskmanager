@@ -4,8 +4,9 @@ import 'package:date_time_format/date_time_format.dart';
 
 class ProjectWidget extends StatelessWidget {
   final ProjectAssignment project;
+  final Function(ProjectAssignment) onProjectUpdated;
 
-  ProjectWidget({required this.project, Key? key}) : super(key: key);
+  ProjectWidget({required this.project, required this.onProjectUpdated, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +50,14 @@ class ProjectWidget extends StatelessWidget {
                         color: Colors.black54
                       ) ,
               ),
-              trailing: const Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.edit),
                   color: Colors.black,
                   disabledColor: Colors.blueGrey,
-                  onPressed: null,
+                  onPressed: () {
+                    onProjectUpdated(project);
+                    },
                 ),
                 IconButton(
                   icon: Icon(Icons.delete),
