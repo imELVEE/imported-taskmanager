@@ -9,7 +9,9 @@ class ProjectWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDueDate = project.dueDate.format(DateTimeFormats.american);
+    String formattedDueDate = project.dueDate == null ?
+      '' :
+      project.dueDate!.format(DateTimeFormats.american);
 
     return Card(
       elevation: 2,
@@ -42,53 +44,32 @@ class ProjectWidget extends StatelessWidget {
                         fontStyle: FontStyle.italic,
                         color: Colors.red,
                       )
-                    : null,
+                    : const TextStyle(
+                        fontStyle: FontStyle.normal,
+                        color: Colors.black54
+                      ) ,
               ),
               trailing: const Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.edit),
                   color: Colors.black,
-                  disabledColor: Colors.red,
+                  disabledColor: Colors.blueGrey,
                   onPressed: null,
                 ),
                 IconButton(
                   icon: Icon(Icons.delete),
                   color: Colors.black,
-                  disabledColor: Colors.red,
+                  disabledColor: Colors.blueGrey,
                   onPressed: null,
                 )
               ]),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: <Widget>[
-                      const Icon(
-                          Icons.brightness_1,
-                          size: 8,
-                          color: Colors.white
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(child: Text(formattedDueDate)),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Icon(
-                          Icons.brightness_1,
-                          size: 8,
-                          color: Colors.white
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(child: Text(project.members.toString())),
-                    ],
-                  ),
+              child: Row(
+                children: <Widget>[
+                  const SizedBox(width: 8),
+                  Expanded(child: Text(formattedDueDate)),
                 ],
               ),
             ),

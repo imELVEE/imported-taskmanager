@@ -9,7 +9,6 @@ class ProjectsList extends StatelessWidget {
       createDate: DateTime.now(),
       dueDate: DateTime.now().add(const Duration(hours: 24)),
       subject: 'Flutter Project',
-      members: 4,
       notes: 'Do Mobile App',
     ),
     ProjectAssignment(
@@ -17,14 +16,12 @@ class ProjectsList extends StatelessWidget {
       createDate: DateTime.now().subtract(const Duration(hours: 8)),
       dueDate: DateTime.now().add(const Duration(hours: 36)),
       subject: 'Some Project 2',
-      members: 56,
     ),
     ProjectAssignment(
       id: 3,
       createDate: DateTime.now().subtract(const Duration(hours: 39)),
       dueDate: DateTime.now().add(const Duration(hours: 12)),
       subject: 'Some Project 3',
-      members: 2,
       completed: true,
       notes: 'Do Something.',
     ),

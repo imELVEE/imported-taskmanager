@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/classes/project_assignment.dart';
 import 'package:planner_app/pages/login.dart';
 import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/calendar.dart';
 import 'package:planner_app/pages/task.dart';
+import 'package:planner_app/widgets/project_form.dart';
 import '../widgets/projects_list.dart';
 
 class ProjectPage extends StatefulWidget{
@@ -14,6 +16,7 @@ class ProjectPage extends StatefulWidget{
 
 class ProjectPageState extends State<ProjectPage> {
   int _currentIndex = 0;
+  ProjectsList projectList = ProjectsList(key: ValueKey('projectsList'));
 
   @override
   Widget build(BuildContext context){
@@ -23,8 +26,45 @@ class ProjectPageState extends State<ProjectPage> {
       appBar: _topAppBar(),
 
       body: ProjectsList(key: ValueKey('projectsList')),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 23, 84, 140),
+        onPressed: () => _showProjectForm(), // Open form to add new task
+        child: Icon(
+            Icons.add,
+        ),
+      ),
 
       bottomNavigationBar: _bottomNavBar(),
+    );
+  }
+
+  // Function to handle saving a task (either add or edit)
+  void _saveProject(ProjectAssignment project) {
+    setState(() {
+      // If the task has an ID, we update the task, otherwise, we add a new task
+      if (project.id == null) {
+        // If task has no id, it's a new task
+        projectList.projects.add(project);
+      } else {
+        // If task has an id, we update it
+        int index = projectList.projects.indexWhere((p) => p.id == project.id);
+        if (index != -1) {
+         projectList.projects[index] = project;
+        }
+      }
+    });
+  }
+
+  // Function to show the dialog for adding/editing a task
+  void _showProjectForm({ProjectAssignment? project}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ProjectForm(
+          project: project,
+          onSave: _saveProject,
+        );
+      },
     );
   }
 

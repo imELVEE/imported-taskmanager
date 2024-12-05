@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-class ProjectAssignment {
+class TaskAssignment {
   int id;
   DateTime createDate;
   String subject;
   String? notes;
-  DateTime? dueDate;
+  DateTime dueDate;
 
   DateTime? completeDate;
   bool completed;
 
-  ProjectAssignment({
+  TaskAssignment({
     required this.id,
     required this.createDate,
+    required this.dueDate,
     required this.subject,
     this.completed = false,
-    this.dueDate,
     this.notes,
     this.completeDate,
   });
