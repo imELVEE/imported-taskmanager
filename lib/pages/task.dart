@@ -38,17 +38,29 @@ class TaskPageState extends State<TaskPage> {
       completed: true,
       notes: 'More to add',
     ),
+    //Subtasks
+    TaskAssignment(
+      id: 7,
+      createDate: DateTime.now().subtract(const Duration(hours: 39)),
+      dueDate: DateTime.now().add(const Duration(hours: 12)),
+      subject: 'Fill Water Glass',
+      notes: 'blah blah',
+      parentId: 4
+    ),
   ];
 
   @override
   Widget build(BuildContext context){
+    final topLevelTasks = tasks.where((t) => t.parentId == null).toList();
+
     return Scaffold(
       backgroundColor: Colors.white,
 
       appBar: _topAppBar(),
 
       body: TasksList(
-        tasks: tasks,
+        tasks: topLevelTasks,
+        allTasks: tasks,
         onTaskUpdate: (task) {
           showDialog(
             context: context,
@@ -61,6 +73,10 @@ class TaskPageState extends State<TaskPage> {
           );
         },
         onDelete: _deleteTask,
+        onAddSubtask: _addSubtask,
+        onToggleSubtask: _toggleSubtask,
+        onEditSubtask: _editSubtask,
+        onDeleteSubtask: _deleteSubtask,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 23, 84, 140),
@@ -101,6 +117,63 @@ class TaskPageState extends State<TaskPage> {
   void _deleteTask(TaskAssignment taskToDelete) {
     setState(() {
       tasks.removeWhere((task) => task.id == taskToDelete.id);
+    });
+  }
+
+  // Add a subtask to a parent task
+  void _addSubtask(TaskAssignment parentTask) {
+    // Show a TaskForm and set the parentId of the new task to parentTask.id
+    showDialog(
+      context: context,
+      builder: (context) {
+        return TaskForm(
+          onSave: (newSubtask) {
+            setState(() {
+              // Assign parentId to link it as a subtask
+              newSubtask.parentId = parentTask.id;
+              tasks.add(newSubtask);
+            });
+          },
+        );
+      },
+    );
+  }
+
+  // Toggle a subtask's completed state
+  void _toggleSubtask(TaskAssignment subtask, bool? value) {
+    setState(() {
+      final index = tasks.indexWhere((t) => t.id == subtask.id);
+      if (index != -1) {
+        tasks[index] = TaskAssignment(
+          id: tasks[index].id,
+          createDate: tasks[index].createDate,
+          dueDate: tasks[index].dueDate,
+          subject: tasks[index].subject,
+          notes: tasks[index].notes,
+          completed: value ?? false,
+          parentId: tasks[index].parentId,
+        );
+      }
+    });
+  }
+
+  // Edit an existing subtask
+  void _editSubtask(TaskAssignment subtask) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return TaskForm(
+          task: subtask,
+          onSave: _updateTask,
+        );
+      },
+    );
+  }
+
+  // Delete a subtask
+  void _deleteSubtask(TaskAssignment subtaskToDelete) {
+    setState(() {
+      tasks.removeWhere((task) => task.id == subtaskToDelete.id);
     });
   }
 

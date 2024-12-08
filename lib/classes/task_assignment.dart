@@ -10,7 +10,7 @@ class TaskAssignment {
   DateTime? completeDate;
   bool completed;
 
-  final int? parentId; // Null for top-level tasks, or the id of the parent task
+  int? parentId; // Null for top-level tasks, or the id of the parent task
 
   TaskAssignment({
     required this.id,

@@ -12,7 +12,7 @@ class ProjectWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String formattedDueDate = project.dueDate == null ?
-      '' :
+      'No Due Date' :
       project.dueDate!.format(DateTimeFormats.american);
 
     return Card(
@@ -75,7 +75,9 @@ class ProjectWidget extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   const SizedBox(width: 8),
-                  Expanded(child: Text(formattedDueDate)),
+                  Expanded(child: Text(
+                    (formattedDueDate + ' | id: ' + project.id.toString()),
+                  )),
                 ],
               ),
             ),

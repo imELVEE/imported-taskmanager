@@ -28,13 +28,14 @@ class ProjectFormState extends State<ProjectForm> {
   int generateIntFromUUID() {
     var uuid = const Uuid();
     String uuidString = uuid.v4();
-
-    List<int> bytes = utf8.encode(uuidString);
-
+    final buffer = List<int>.filled(16, 0);
+    List<int> rawBytes = uuid.v4buffer(buffer); // Gets a 16-byte list representing the UUID
+    // Construct a 64-bit integer from the first 8 bytes:
     int intId = 0;
     for (int i = 0; i < 8; i++) {
-      intId = (intId << 8) | bytes[i];
+      intId = (intId << 8) | rawBytes[i];
     }
+    intId = intId & 0x7FFFFFFFFFFFFFFF; //ensure positive
 
     return intId;
   }
