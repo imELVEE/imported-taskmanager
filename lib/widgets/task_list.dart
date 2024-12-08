@@ -9,6 +9,7 @@ class TasksList extends StatelessWidget {
   final void Function(TaskAssignment subtask, bool? value) onToggleSubtask;
   final void Function(TaskAssignment subtask) onEditSubtask;
   final void Function(TaskAssignment subtask) onDeleteSubtask;
+  final Function(TaskAssignment, bool?) onToggleTaskCompletion;
   List<TaskAssignment> tasks; // parent tasks only
   final List<TaskAssignment> allTasks;      // All tasks, including subtasks
 
@@ -21,6 +22,7 @@ class TasksList extends StatelessWidget {
     required this.onToggleSubtask,
     required this.onEditSubtask,
     required this.onDeleteSubtask,
+    required this.onToggleTaskCompletion,
     Key? key
   }) : super(key: key);
 
@@ -45,6 +47,7 @@ class TasksList extends StatelessWidget {
           onToggleSubtask: onToggleSubtask,
           onEditSubtask: onEditSubtask,
           onDeleteSubtask: onDeleteSubtask,
+          onToggleTaskCompletion: onToggleTaskCompletion,
         );
       },
     );

@@ -77,6 +77,7 @@ class TaskPageState extends State<TaskPage> {
         onToggleSubtask: _toggleSubtask,
         onEditSubtask: _editSubtask,
         onDeleteSubtask: _deleteSubtask,
+        onToggleTaskCompletion: _toggleTaskCompletion,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 23, 84, 140),
@@ -117,6 +118,23 @@ class TaskPageState extends State<TaskPage> {
   void _deleteTask(TaskAssignment taskToDelete) {
     setState(() {
       tasks.removeWhere((task) => task.id == taskToDelete.id);
+    });
+  }
+
+  void _toggleTaskCompletion(TaskAssignment task, bool? value) {
+    setState(() {
+      final index = tasks.indexWhere((t) => t.id == task.id);
+      if (index != -1) {
+        tasks[index] = TaskAssignment(
+          id: tasks[index].id,
+          createDate: tasks[index].createDate,
+          dueDate: tasks[index].dueDate,
+          subject: tasks[index].subject,
+          notes: tasks[index].notes,
+          completed: value ?? false,
+          parentId: tasks[index].parentId,
+        );
+      }
     });
   }
 

@@ -11,6 +11,7 @@ class TaskWidget extends StatelessWidget {
   final void Function(TaskAssignment subtask, bool? value) onToggleSubtask;
   final void Function(TaskAssignment subtask) onEditSubtask;
   final void Function(TaskAssignment subtask) onDeleteSubtask;
+  final Function(TaskAssignment, bool?) onToggleTaskCompletion;
 
   const TaskWidget({
     Key? key,
@@ -22,6 +23,7 @@ class TaskWidget extends StatelessWidget {
     required this.onToggleSubtask,
     required this.onEditSubtask,
     required this.onDeleteSubtask,
+    required this.onToggleTaskCompletion,
   }) : super(key: key);
 
   @override
@@ -42,11 +44,20 @@ class TaskWidget extends StatelessWidget {
           children: [
             ListTile(
               tileColor: Colors.white,
-              leading: Icon(
-                task.completed
-                    ? Icons.check_box_outlined
-                    : Icons.check_box_outline_blank,
-                color: task.completed ? Colors.black : Colors.blue,
+              leading: Checkbox(
+                fillColor: WidgetStatePropertyAll(Colors.white),
+                side: WidgetStateBorderSide.resolveWith((states) {
+                  if (states.contains(WidgetState.selected))
+                    return const BorderSide(color: Colors.black);
+                  else
+                    return const BorderSide(color: Colors.blue);
+                }
+                ),
+                checkColor: Colors.black,
+                value: task.completed,
+                onChanged: (value) {
+                  onToggleTaskCompletion(task, value);
+                },
               ),
               title: Text(
                 task.subject,
