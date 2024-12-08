@@ -49,7 +49,7 @@ class ProjectPageState extends State<ProjectPage> {
 
       body: ProjectsList(
         projects: projects,
-        onProjectUpdated: (project) {
+        onProjectUpdate: (project) {
           showDialog(
             context: context,
             builder: (context) {
@@ -81,14 +81,14 @@ class ProjectPageState extends State<ProjectPage> {
     );
   }
 
-  // Add new task to the list
+  // Add new project to the list
   void _addProject(ProjectAssignment newProject) {
     setState(() {
       projects.add(newProject);
     });
   }
 
-  // Update existing task
+  // Update existing project
   void _updateProject(ProjectAssignment updatedProject) {
     setState(() {
       final index = projects.indexWhere((project) => project.id == updatedProject.id);

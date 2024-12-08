@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
-import '../classes/project_assignment.dart';
+import 'package:planner_app/classes/task_assignment.dart';
 import 'package:date_time_format/date_time_format.dart';
 
-class ProjectWidget extends StatelessWidget {
-  final ProjectAssignment project;
-  final Function(ProjectAssignment) onProjectUpdate;
-  final Function(ProjectAssignment) onDelete;
+class TaskWidget extends StatelessWidget {
+  final TaskAssignment task;
+  final Function(TaskAssignment) onTaskUpdate;
+  final Function(TaskAssignment) onDelete;
 
-  ProjectWidget({required this.project, required this.onProjectUpdate, required this.onDelete, Key? key}) : super(key: key);
+  const TaskWidget({
+    Key? key,
+    required this.task,
+    required this.onTaskUpdate,
+    required this.onDelete,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String formattedDueDate = project.dueDate == null ?
-      '' :
-      project.dueDate!.format(DateTimeFormats.american);
+    String formattedDueDate = task.dueDate == null ?
+    '' :
+    task.dueDate!.format(DateTimeFormats.american);
 
     return Card(
       elevation: 2,
@@ -26,13 +31,13 @@ class ProjectWidget extends StatelessWidget {
             ListTile(
               tileColor: Colors.white,
               leading: Icon(
-                project.completed
+                task.completed
                     ? Icons.check_box_outlined
                     : Icons.check_box_outline_blank,
-                color: project.completed ? Colors.black : Colors.blue,
+                color: task.completed ? Colors.black : Colors.blue,
               ),
               title: Text(
-                project.subject,
+                task.subject,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -40,16 +45,16 @@ class ProjectWidget extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                project.notes ?? 'No Description',
-                style: project.notes == null
+                task.notes ?? 'No Description',
+                style: task.notes == null
                     ? const TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: Colors.red,
-                      )
+                  fontStyle: FontStyle.italic,
+                  color: Colors.red,
+                )
                     : const TextStyle(
-                        fontStyle: FontStyle.normal,
-                        color: Colors.black54
-                      ) ,
+                    fontStyle: FontStyle.normal,
+                    color: Colors.black54
+                ) ,
               ),
               trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 IconButton(
@@ -57,28 +62,37 @@ class ProjectWidget extends StatelessWidget {
                   color: Colors.black,
                   disabledColor: Colors.blueGrey,
                   onPressed: () {
-                    onProjectUpdate(project);
-                    },
+                    onTaskUpdate(task);
+                  },
                 ),
                 IconButton(
                   icon: Icon(Icons.delete),
                   color: Colors.black,
                   disabledColor: Colors.blueGrey,
                   onPressed: () {
-                    onDelete(project);
+                    onDelete(task);
                   },
                 )
               ]),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: <Widget>[
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(formattedDueDate)),
-                ],
+            Container(
+              color: Colors.white54,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: <Widget>[
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        formattedDueDate,
+                        style: TextStyle(color: Colors.black)
+                      )
+                    ),
+                  ],
+                ),
               ),
-            ),
+            )
+
           ],
         ),
       ),

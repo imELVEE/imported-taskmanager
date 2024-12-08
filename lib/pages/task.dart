@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/classes/task_assignment.dart';
 import 'package:planner_app/pages/login.dart';
 import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/calendar.dart';
 import 'package:planner_app/pages/project.dart';
+import 'package:planner_app/widgets/task_form.dart';
+import 'package:planner_app/widgets/task_list.dart';
 
 class TaskPage extends StatefulWidget{
   const TaskPage({super.key});
@@ -13,6 +16,29 @@ class TaskPage extends StatefulWidget{
 
 class TaskPageState extends State<TaskPage> {
   int _currentIndex = 0;
+  List<TaskAssignment> tasks = [
+    TaskAssignment(
+      id: 4,
+      createDate: DateTime.now(),
+      dueDate: DateTime.now().add(const Duration(hours: 24)),
+      subject: 'Drink Water',
+      notes: 'Fill glass.',
+    ),
+    TaskAssignment(
+      id: 5,
+      createDate: DateTime.now().subtract(const Duration(hours: 8)),
+      dueDate: DateTime.now().add(const Duration(hours: 36)),
+      subject: 'Some Task 2',
+    ),
+    TaskAssignment(
+      id: 6,
+      createDate: DateTime.now().subtract(const Duration(hours: 39)),
+      dueDate: DateTime.now().add(const Duration(hours: 12)),
+      subject: 'Finish tasks class/widget',
+      completed: true,
+      notes: 'More to add',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context){
@@ -21,19 +47,61 @@ class TaskPageState extends State<TaskPage> {
 
       appBar: _topAppBar(),
 
-      body: const Center(
-          child: Text(
-            'Task Page',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(179, 3, 64, 113),
-            ),
-          )
+      body: TasksList(
+        tasks: tasks,
+        onTaskUpdate: (task) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return TaskForm(
+                task: task,
+                onSave: _updateTask,
+              );
+            },
+          );
+        },
+        onDelete: _deleteTask,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 23, 84, 140),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return TaskForm(
+                onSave: _addTask,
+              );
+            },
+          );
+        }, // Open form to add new task
+        child: Icon(Icons.add),
       ),
 
       bottomNavigationBar: _bottomNavBar(),
     );
+  }
+
+  // Add new task to the list
+  void _addTask(TaskAssignment newTask) {
+    setState(() {
+      tasks.add(newTask);
+    });
+  }
+
+  // Update existing task
+  void _updateTask(TaskAssignment updatedTask) {
+    setState(() {
+      final index = tasks.indexWhere((task) => task.id == updatedTask.id);
+      if (index != -1) {
+        tasks[index] = updatedTask;
+      }
+    });
+  }
+
+  void _deleteTask(TaskAssignment taskToDelete) {
+    setState(() {
+      tasks.removeWhere((task) => task.id == taskToDelete.id);
+    });
   }
 
   PreferredSizeWidget _topAppBar(){
