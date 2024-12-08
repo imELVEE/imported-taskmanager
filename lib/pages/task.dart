@@ -45,6 +45,7 @@ class TaskPageState extends State<TaskPage> {
       dueDate: DateTime.now().add(const Duration(hours: 12)),
       subject: 'Fill Water Glass',
       notes: 'blah blah',
+      completed: true,
       parentId: 4
     ),
   ];
@@ -74,7 +75,7 @@ class TaskPageState extends State<TaskPage> {
         },
         onDelete: _deleteTask,
         onAddSubtask: _addSubtask,
-        onToggleSubtask: _toggleSubtask,
+        onToggleSubtask: _toggleTaskCompletion,
         onEditSubtask: _editSubtask,
         onDeleteSubtask: _deleteSubtask,
         onToggleTaskCompletion: _toggleTaskCompletion,
@@ -135,8 +136,35 @@ class TaskPageState extends State<TaskPage> {
           parentId: tasks[index].parentId,
         );
       }
+
+      _setSubtasksCompletion(tasks[index].id, value ?? false);
     });
   }
+
+  void _setSubtasksCompletion(int parentId, bool completed) {
+    // Find all tasks whose parentId matches parentId
+    final childTasks = tasks.where((t) => t.parentId == parentId).toList();
+
+    for (final child in childTasks) {
+      // Update this child's completion
+      final index = tasks.indexWhere((task) => task.id == child.id);
+      if (index != -1) {
+        tasks[index] = TaskAssignment(
+          id: tasks[index].id,
+          createDate: tasks[index].createDate,
+          dueDate: tasks[index].dueDate,
+          subject: tasks[index].subject,
+          notes: tasks[index].notes,
+          completed: completed,
+          parentId: tasks[index].parentId,
+        );
+      }
+
+      // Recursively update this child's subtasks
+      _setSubtasksCompletion(child.id, completed);
+    }
+  }
+
 
   // Add a subtask to a parent task
   void _addSubtask(TaskAssignment parentTask) {
@@ -155,24 +183,6 @@ class TaskPageState extends State<TaskPage> {
         );
       },
     );
-  }
-
-  // Toggle a subtask's completed state
-  void _toggleSubtask(TaskAssignment subtask, bool? value) {
-    setState(() {
-      final index = tasks.indexWhere((t) => t.id == subtask.id);
-      if (index != -1) {
-        tasks[index] = TaskAssignment(
-          id: tasks[index].id,
-          createDate: tasks[index].createDate,
-          dueDate: tasks[index].dueDate,
-          subject: tasks[index].subject,
-          notes: tasks[index].notes,
-          completed: value ?? false,
-          parentId: tasks[index].parentId,
-        );
-      }
-    });
   }
 
   // Edit an existing subtask
