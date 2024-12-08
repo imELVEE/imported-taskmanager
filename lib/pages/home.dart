@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:planner_app/pages/login.dart';
-import 'package:planner_app/pages/calendar.dart';
+import 'package:planner_app/pages/support.dart';
+// import 'package:planner_app/pages/calendar.dart';
 import 'package:planner_app/pages/task.dart';
 import 'package:planner_app/pages/project.dart';
 
@@ -50,16 +51,16 @@ class HomePageState extends State<HomePage> {
     return BottomNavigationBar(
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month),
-          label: 'Calendar',
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.task),
           label: 'Tasks',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.assignment),
           label: 'Projects',
+        ),
+         BottomNavigationBarItem(
+          icon: Icon(Icons.question_mark_rounded),
+          label: 'Support',
         ),
       ],
       onTap: _onTap,
@@ -70,13 +71,13 @@ class HomePageState extends State<HomePage> {
   void _onTap(int index){
     switch(index) {
       case 0:
-        _calendarPageRoute();
-        break;
-      case 1:
         _taskPageRoute();
         break;
-      case 2:
+      case 1:
         _projectPageRoute();
+        break;
+      case 2:
+        _supportPageRoute();
         break;
     }
   }
@@ -87,14 +88,12 @@ class HomePageState extends State<HomePage> {
       MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
-
-  void _calendarPageRoute(){
+    void _supportPageRoute(){
     Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const CalendarPage()),
+        context,
+        MaterialPageRoute(builder: (context) => const SupportPage())
     );
   }
-
   void _taskPageRoute(){
     Navigator.pushReplacement(
         context,

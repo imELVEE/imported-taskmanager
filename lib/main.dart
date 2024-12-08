@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:planner_app/firebase_options.dart';
-import 'package:planner_app/pages/login.dart';
 import 'package:planner_app/pages/home.dart';
 
 Future<void> main() async {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:planner_app/classes/task_assignment.dart';
 import 'package:planner_app/pages/login.dart';
 import 'package:planner_app/pages/home.dart';
-import 'package:planner_app/pages/calendar.dart';
 import 'package:planner_app/pages/project.dart';
+import 'package:planner_app/pages/support.dart';
 import 'package:planner_app/widgets/task_form.dart';
 import 'package:planner_app/widgets/task_list.dart';
 
@@ -219,20 +219,21 @@ class TaskPageState extends State<TaskPage> {
     );
   }
 
-  Widget _bottomNavBar(){
+  Widget _bottomNavBar() {
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed, 
       items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month),
-          label: 'Calendar',
-        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.task),
           label: 'Tasks',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.assignment),
-          label: 'Projects',
+          icon: Icon(Icons.menu_book),
+          label: 'Project',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.question_mark_rounded),
+          label: 'Support',
         ),
       ],
       onTap: _onTap,
@@ -240,17 +241,24 @@ class TaskPageState extends State<TaskPage> {
     );
   }
 
-  void _onTap(int index){
-    switch(index) {
+  void _onTap(int index) {
+    switch (index) {
       case 0:
-        _calendarPageRoute();
+        _taskPageRoute();
         break;
       case 1:
-        break;
-      case 2:
         _projectPageRoute();
         break;
+      case 2:
+        _supportPageRoute();
+        break;
     }
+  }
+   void _supportPageRoute() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const SupportPage()),
+    );
   }
 
   void _loginPageRoute(){
@@ -267,10 +275,10 @@ class TaskPageState extends State<TaskPage> {
     );
   }
 
-  void _calendarPageRoute(){
+ void _taskPageRoute(){
     Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const CalendarPage()),
+        context,
+        MaterialPageRoute(builder: (context) => const TaskPage())
     );
   }
 
