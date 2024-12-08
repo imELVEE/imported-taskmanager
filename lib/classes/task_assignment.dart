@@ -23,5 +23,22 @@ class TaskAssignment {
     this.parentId,
   });
 
-
+  TaskAssignment copyWith({
+    bool? completed,
+    String? subject,
+    String? notes,
+    DateTime? dueDate,
+    int? parentId,
+  }) {
+    return TaskAssignment(
+      id: id,
+      parentId: parentId ?? this.parentId,
+      createDate: createDate,
+      dueDate: dueDate ?? this.dueDate,
+      subject: subject ?? this.subject,
+      notes: notes ?? this.notes,
+      completed: completed ?? this.completed,
+      completeDate: completeDate,
+    );
+  }
 }

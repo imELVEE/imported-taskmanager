@@ -101,8 +101,10 @@ class TaskWidget extends StatelessWidget {
             ExpansionTile(
               backgroundColor: Colors.white70,
               textColor: Colors.black,
+              iconColor: Colors.black,
               collapsedBackgroundColor: Colors.black,
               collapsedTextColor: Colors.white,
+              collapsedIconColor: Colors.white,
               title: Text(
                   (formattedDueDate + ' | id: ' + task.id.toString()),
               ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:planner_app/classes/project_assignment.dart';
+import 'package:planner_app/classes/task_assignment.dart';
 import 'package:planner_app/pages/login.dart';
 import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/calendar.dart';
 import 'package:planner_app/pages/task.dart';
 import 'package:planner_app/widgets/project_form.dart';
+import 'package:planner_app/widgets/task_form.dart';
 import '../widgets/projects_list.dart';
 
 class ProjectPage extends StatefulWidget{
@@ -40,6 +42,15 @@ class ProjectPageState extends State<ProjectPage> {
     ),
   ];
 
+  List<TaskAssignment> allTasks = [
+    TaskAssignment(
+        id: 14,
+        createDate: DateTime.now(),
+        subject: 'subtask under prj',
+        parentId: 1,
+    )
+  ];
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -49,6 +60,7 @@ class ProjectPageState extends State<ProjectPage> {
 
       body: ProjectsList(
         projects: projects,
+        allTasks: allTasks,
         onProjectUpdate: (project) {
           showDialog(
             context: context,
@@ -61,6 +73,12 @@ class ProjectPageState extends State<ProjectPage> {
           );
         },
         onDelete: _deleteProject,
+
+        onAddTask: _addTaskToProject,
+        onToggleTaskCompletion: _toggleTaskCompletion,
+        onEditTask: _editTask,
+        onDeleteTask: _deleteTask,
+        onToggleProjectCompletion: _toggleProjectCompletion,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 23, 84, 140),
@@ -102,6 +120,103 @@ class ProjectPageState extends State<ProjectPage> {
     setState(() {
       projects.removeWhere((project) => project.id == projectToDelete.id);
     });
+  }
+
+  void _toggleProjectCompletion(ProjectAssignment project, bool? value) {
+    setState(() {
+      final pIndex = projects.indexWhere((p) => p.id == project.id);
+      if (pIndex != -1) {
+        projects[pIndex].completed = value ?? false;
+        // If you want to also propagate completion state to all tasks of this project:
+        _setProjectTasksCompletion(project.id, value ?? false);
+      }
+    });
+  }
+
+  void _setProjectTasksCompletion(int projectId, bool completed) {
+    // Find all tasks directly under this project
+    final projectTasks = allTasks.where((t) => t.parentId == projectId).toList();
+    for (var task in projectTasks) {
+      final index = allTasks.indexWhere((t) => t.id == task.id);
+      if (index != -1) {
+        allTasks[index] = allTasks[index].copyWith(completed: completed);
+        _setSubtasksCompletion(allTasks[index].id, completed);
+      }
+    }
+  }
+
+  void _addTaskToProject(ProjectAssignment project) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return TaskForm(
+          onSave: (newTask) {
+            setState(() {
+              newTask.parentId = project.id;
+              allTasks.add(newTask);
+            });
+          },
+        );
+      },
+    );
+  }
+
+  // Toggle top-level task completion (and optionally its subtasks)
+  void _toggleTaskCompletion(TaskAssignment task, bool? value) {
+    setState(() {
+      final index = allTasks.indexWhere((t) => t.id == task.id);
+      if (index != -1) {
+        allTasks[index] = allTasks[index].copyWith(completed: value ?? false);
+        _setSubtasksCompletion(allTasks[index].id, value ?? false);
+      }
+    });
+  }
+
+  void _setSubtasksCompletion(int parentId, bool completed) {
+    final childTasks = allTasks.where((t) => t.parentId == parentId).toList();
+    for (var child in childTasks) {
+      final index = allTasks.indexWhere((t) => t.id == child.id);
+      if (index != -1) {
+        allTasks[index] = allTasks[index].copyWith(completed: completed);
+        _setSubtasksCompletion(allTasks[index].id, completed);
+      }
+    }
+  }
+
+  // Edit a top-level task or subtask
+  void _editTask(TaskAssignment task) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return TaskForm(
+          task: task,
+          onSave: (updatedTask) {
+            setState(() {
+              final index = allTasks.indexWhere((t) => t.id == updatedTask.id);
+              if (index != -1) {
+                allTasks[index] = updatedTask;
+              }
+            });
+          },
+        );
+      },
+    );
+  }
+
+  // Delete a top-level task
+  void _deleteTask(TaskAssignment taskToDelete) {
+    setState(() {
+      allTasks.removeWhere((t) => t.id == taskToDelete.id);
+      _removeAllDescendants(taskToDelete.id);
+    });
+  }
+
+  void _removeAllDescendants(int parentId) {
+    final children = allTasks.where((t) => t.parentId == parentId).toList();
+    for (var child in children) {
+      allTasks.removeWhere((t) => t.id == child.id);
+      _removeAllDescendants(child.id);
+    }
   }
 
   PreferredSizeWidget _topAppBar(){
