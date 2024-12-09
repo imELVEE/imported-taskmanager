@@ -83,7 +83,7 @@ class ProjectWidget extends StatelessWidget {
               ),
               trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   color: Colors.black,
                   disabledColor: Colors.blueGrey,
                   onPressed: () {
@@ -91,7 +91,7 @@ class ProjectWidget extends StatelessWidget {
                     },
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   color: Colors.black,
                   disabledColor: Colors.blueGrey,
                   onPressed: () {
@@ -135,7 +135,7 @@ class ProjectWidget extends StatelessWidget {
 
     return ListTile(
       leading: Checkbox(
-        fillColor: WidgetStatePropertyAll(Colors.white),
+        fillColor: const WidgetStatePropertyAll(Colors.white),
         side: BorderSide(color: subtask.completed ? Colors.black : Colors.blue),
         checkColor: Colors.black,
         value: subtask.completed,
@@ -143,7 +143,7 @@ class ProjectWidget extends StatelessWidget {
       ),
       title: Text(
         subtask.subject,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),

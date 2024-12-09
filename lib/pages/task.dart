@@ -228,8 +228,8 @@ class TaskPageState extends State<TaskPage> {
           label: 'Tasks',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.menu_book),
-          label: 'Project',
+          icon: Icon(Icons.assignment),
+          label: 'Projects',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.question_mark_rounded),

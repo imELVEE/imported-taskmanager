@@ -45,7 +45,7 @@ class TaskWidget extends StatelessWidget {
             ListTile(
               tileColor: Colors.white,
               leading: Checkbox(
-                fillColor: WidgetStatePropertyAll(Colors.white),
+                fillColor: const WidgetStatePropertyAll(Colors.white),
                 side: WidgetStateBorderSide.resolveWith((states) {
                   if (states.contains(WidgetState.selected))
                     return const BorderSide(color: Colors.black);
@@ -81,7 +81,7 @@ class TaskWidget extends StatelessWidget {
               ),
               trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   color: Colors.black,
                   disabledColor: Colors.blueGrey,
                   onPressed: () {
@@ -89,7 +89,7 @@ class TaskWidget extends StatelessWidget {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   color: Colors.black,
                   disabledColor: Colors.blueGrey,
                   onPressed: () {
@@ -132,7 +132,7 @@ class TaskWidget extends StatelessWidget {
 
     return ListTile(
       leading: Checkbox(
-        fillColor: WidgetStatePropertyAll(Colors.white),
+        fillColor: const WidgetStatePropertyAll(Colors.white),
         side: WidgetStateBorderSide.resolveWith((states) {
             if (states.contains(WidgetState.selected))
               return const BorderSide(color: Colors.black);
@@ -146,7 +146,7 @@ class TaskWidget extends StatelessWidget {
       ),
       title: Text(
           subtask.subject,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
@@ -159,13 +159,13 @@ class TaskWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () => onEditSubtask(subtask),
             color: Colors.black,
             disabledColor: Colors.blueGrey,
           ),
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () => onDeleteSubtask(subtask),
             color: Colors.black,
             disabledColor: Colors.blueGrey,

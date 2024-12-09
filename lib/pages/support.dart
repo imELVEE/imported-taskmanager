@@ -124,7 +124,7 @@ class SupportPageState extends State<SupportPage> {
       backgroundColor: const Color.fromARGB(255, 3, 64, 113),
       title: const Text('Planner App Support'),
       actions: [
-        TextButton(onPressed: _loginPageRoute, child: const Text('Login')),
+        TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
       ],
     );
   }
@@ -138,8 +138,8 @@ class SupportPageState extends State<SupportPage> {
           label: 'Tasks',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.menu_book),
-          label: 'Project',
+          icon: Icon(Icons.assignment),
+          label: 'Projects',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.question_mark_rounded),

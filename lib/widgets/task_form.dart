@@ -129,7 +129,7 @@ class TaskFormState extends State<TaskForm> {
                           ? _createDate!.format(DateTimeFormats.american)
                           : 'Creation Date',  // Default text
                     ),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Create Date',
                       hintText: 'Tap to select a date',
                     ),
@@ -164,7 +164,7 @@ class TaskFormState extends State<TaskForm> {
                             ? _completeDate!.format(DateTimeFormats.american)
                             : 'Select completion date',  // Default text
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Completion Date',
                         hintText: 'Tap to select a date',
                       ),
@@ -186,7 +186,7 @@ class TaskFormState extends State<TaskForm> {
                           ? _dueDate!.format(DateTimeFormats.american)
                           : 'Due Date',  // Default text
                     ),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Due Date',
                       hintText: 'Tap to select a date',
                     ),
