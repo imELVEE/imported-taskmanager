@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/classes/task_assignment.dart';
 import './project_widget.dart';
 import '../classes/project_assignment.dart';
 
 class ProjectsList extends StatelessWidget {
-  final List<ProjectAssignment> projects = [
-    ProjectAssignment(
-      id: 1,
-      createDate: DateTime.now(),
-      dueDate: DateTime.now().add(const Duration(hours: 24)),
-      subject: 'Flutter Project',
-      members: 4,
-      notes: 'Do Mobile App',
-    ),
-    ProjectAssignment(
-      id: 2,
-      createDate: DateTime.now().subtract(const Duration(hours: 8)),
-      dueDate: DateTime.now().add(const Duration(hours: 36)),
-      subject: 'Some Project 2',
-      members: 56,
-    ),
-    ProjectAssignment(
-      id: 3,
-      createDate: DateTime.now().subtract(const Duration(hours: 39)),
-      dueDate: DateTime.now().add(const Duration(hours: 12)),
-      subject: 'Some Project 3',
-      members: 2,
-      completed: true,
-      notes: 'Do Something.',
-    ),
-  ];
+  final Function(ProjectAssignment) onProjectUpdate;
+  final Function(ProjectAssignment) onDelete;
+  List<ProjectAssignment> projects;
+  final Function(ProjectAssignment, bool?) onToggleProjectCompletion;
 
-  ProjectsList({Key? key}) : super(key: key);
+  final List<TaskAssignment> allTasks;
+  final Function(ProjectAssignment) onAddTask;
+  final Function(TaskAssignment, bool?) onToggleTaskCompletion;
+  final Function(TaskAssignment) onEditTask;
+  final Function(TaskAssignment) onDeleteTask;
+
+  ProjectsList({
+    required this.projects,
+    required this.onProjectUpdate,
+    required this.onDelete,
+    required this.allTasks,
+    required this.onAddTask,
+    required this.onToggleTaskCompletion,
+    required this.onToggleProjectCompletion,
+    required this.onEditTask,
+    required this.onDeleteTask,
+    Key? key
+  }) : super(key: key);
+
+  void addProject(ProjectAssignment project){
+    projects.add(project);
+  }
 
   @override
   Widget build(BuildContext context){
@@ -39,6 +39,14 @@ class ProjectsList extends StatelessWidget {
       itemBuilder: (context, index) {
         return ProjectWidget(
             project: projects[index],
+            onProjectUpdate: onProjectUpdate,
+            onDelete: onDelete,
+            allTasks: allTasks,
+            onAddTask: onAddTask,
+            onToggleTaskCompletion: onToggleTaskCompletion,
+          onToggleProjectCompletion: onToggleProjectCompletion,
+            onEditTask: onEditTask,
+            onDeleteTask: onDeleteTask,
             key: ValueKey(projects[index].id),
         );
       },
