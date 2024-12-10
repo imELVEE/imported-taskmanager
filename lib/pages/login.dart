@@ -18,15 +18,23 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   final GoogleAuth _googleAuth = GoogleAuth();
 
-  void _googleSignIn() async { // Google sign in method
+void _googleSignIn() async {
+  try {
     final user = await _googleAuth.googleSignIn();
     if (user != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
+      // Check if the widget is still mounted before navigating
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      }
     }
+  } catch (e) {
+    // Handle any errors that may occur
+    print('Error during Google Sign-In: $e');
   }
+}
 
  Future<void> _emailSignIn() async {
   // Check if email and password are not empty

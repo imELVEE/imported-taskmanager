@@ -16,7 +16,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdkVersion 34
-    namespace = "com.example.planner_app"
+    namespace = "planner_app_6713f.com.planner_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
