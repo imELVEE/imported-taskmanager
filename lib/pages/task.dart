@@ -144,7 +144,7 @@ class TaskPageState extends State<TaskPage> {
           subject: tasks[index].subject,
           notes: tasks[index].notes,
           completed: value ?? false,
-          completeDate: DateTime.now(),
+          completeDate: value ?? false ? DateTime.now() : null,
           parentId: tasks[index].parentId,
         );
       }
@@ -168,7 +168,7 @@ class TaskPageState extends State<TaskPage> {
           subject: tasks[index].subject,
           notes: tasks[index].notes,
           completed: completed,
-          completeDate: DateTime.now(),
+          completeDate: completed ? DateTime.now() : null,
           parentId: tasks[index].parentId,
         );
       }

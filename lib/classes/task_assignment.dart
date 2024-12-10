@@ -24,6 +24,7 @@ class TaskAssignment {
 
   TaskAssignment copyWith({
     bool? completed,
+    DateTime? completeDate,
     String? subject,
     String? notes,
     DateTime? dueDate,
@@ -37,7 +38,7 @@ class TaskAssignment {
       subject: subject ?? this.subject,
       notes: notes ?? this.notes,
       completed: completed ?? this.completed,
-      completeDate: completeDate,
+      completeDate: completeDate ?? this.completeDate,
     );
   }
 }

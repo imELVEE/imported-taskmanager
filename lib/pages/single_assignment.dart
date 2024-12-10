@@ -16,7 +16,8 @@ class DetailPage extends StatefulWidget {
   final Function(TaskAssignment, bool?) onToggleTaskCompletion;
   final Function(TaskAssignment) onEditSubtask;
   final Function(TaskAssignment) onDeleteSubtask;
-  final Function(TaskAssignment) onAddSubtask;
+  final Function(TaskAssignment)? onAddSubtask;
+  final Function(ProjectAssignment)? onAddTask;
 
   DetailPage({
     Key? key,
@@ -28,7 +29,8 @@ class DetailPage extends StatefulWidget {
     required this.onToggleTaskCompletion,
     required this.onEditSubtask,
     required this.onDeleteSubtask,
-    required this.onAddSubtask,
+    this.onAddSubtask,
+    this.onAddTask
   }) : super(key: key);
 
   @override
@@ -65,12 +67,14 @@ class DetailPageState extends State<DetailPage> {
 
   Widget _buildSubList(BuildContext context) {
     Future<void> _addSubtaskLocal() async{
-      TaskAssignment subtask = await widget.onAddSubtask(widget.assignment);
-      setState(() {
-        if(subtask != null) {
-          widget.subTasks.add(subtask);
-        }
-      });
+      if (isTask()) {
+        TaskAssignment subtask = await widget.onAddSubtask?.call(widget.assignment);
+        setState(() {
+          if (subtask != null) {
+            widget.subTasks.add(subtask);
+          }
+        });
+      }
     }
 
     return SingleChildScrollView(

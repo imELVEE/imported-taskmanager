@@ -128,6 +128,7 @@ class ProjectPageState extends State<ProjectPage> {
       final pIndex = projects.indexWhere((p) => p.id == project.id);
       if (pIndex != -1) {
         projects[pIndex].completed = value ?? false;
+        projects[pIndex].completeDate = value ?? false ? DateTime.now() : null;
         // If you want to also propagate completion state to all tasks of this project:
         _setProjectTasksCompletion(project.id, value ?? false);
       }
@@ -140,7 +141,10 @@ class ProjectPageState extends State<ProjectPage> {
     for (var task in projectTasks) {
       final index = allTasks.indexWhere((t) => t.id == task.id);
       if (index != -1) {
-        allTasks[index] = allTasks[index].copyWith(completed: completed);
+        allTasks[index] = allTasks[index].copyWith(
+            completed: completed,
+            completeDate: completed ? DateTime.now() : null
+        );
         _setSubtasksCompletion(allTasks[index].id, completed);
       }
     }
@@ -179,7 +183,10 @@ class ProjectPageState extends State<ProjectPage> {
     for (var child in childTasks) {
       final index = allTasks.indexWhere((t) => t.id == child.id);
       if (index != -1) {
-        allTasks[index] = allTasks[index].copyWith(completed: completed);
+        allTasks[index] = allTasks[index].copyWith(
+            completed: completed,
+            completeDate: completed ? DateTime.now() : null
+        );
         _setSubtasksCompletion(allTasks[index].id, completed);
       }
     }
