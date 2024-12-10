@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="planner_app_6713f.com.planner_app">
     <application
+        android:enableOnBackInvokedCallback="true"
         android:label="planner_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
