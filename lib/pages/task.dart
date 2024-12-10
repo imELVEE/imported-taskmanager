@@ -18,20 +18,20 @@ class TaskPageState extends State<TaskPage> {
   int _currentIndex = 0;
   List<TaskAssignment> tasks = [
     TaskAssignment(
-      id: 4,
+      id: '4',
       createDate: DateTime.now(),
       dueDate: DateTime.now().add(const Duration(hours: 24)),
       subject: 'Drink Water',
       notes: 'Fill glass.',
     ),
     TaskAssignment(
-      id: 5,
+      id: '5',
       createDate: DateTime.now().subtract(const Duration(hours: 8)),
       dueDate: DateTime.now().add(const Duration(hours: 36)),
       subject: 'Some Task 2',
     ),
     TaskAssignment(
-      id: 6,
+      id: '6',
       createDate: DateTime.now().subtract(const Duration(hours: 39)),
       dueDate: DateTime.now().add(const Duration(hours: 12)),
       subject: 'Finish tasks class/widget',
@@ -40,13 +40,13 @@ class TaskPageState extends State<TaskPage> {
     ),
     //Subtasks
     TaskAssignment(
-      id: 7,
+      id: '7',
       createDate: DateTime.now().subtract(const Duration(hours: 39)),
       dueDate: DateTime.now().add(const Duration(hours: 12)),
       subject: 'Fill Water Glass',
       notes: 'blah blah',
       completed: true,
-      parentId: 4
+      parentId: '4'
     ),
   ];
 
@@ -141,7 +141,7 @@ class TaskPageState extends State<TaskPage> {
     });
   }
 
-  void _setSubtasksCompletion(int parentId, bool completed) {
+  void _setSubtasksCompletion(String parentId, bool completed) {
     // Find all tasks whose parentId matches parentId
     final childTasks = tasks.where((t) => t.parentId == parentId).toList();
 

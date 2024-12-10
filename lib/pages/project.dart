@@ -21,20 +21,20 @@ class ProjectPageState extends State<ProjectPage> {
   int _currentIndex = 0;
   List<ProjectAssignment> projects = [
     ProjectAssignment(
-      id: 1,
+      id: '1',
       createDate: DateTime.now(),
       dueDate: DateTime.now().add(const Duration(hours: 24)),
       subject: 'Flutter Project',
       notes: 'Do Mobile App',
     ),
     ProjectAssignment(
-      id: 2,
+      id: '2',
       createDate: DateTime.now().subtract(const Duration(hours: 8)),
       dueDate: DateTime.now().add(const Duration(hours: 36)),
       subject: 'Some Project 2',
     ),
     ProjectAssignment(
-      id: 3,
+      id: '3',
       createDate: DateTime.now().subtract(const Duration(hours: 39)),
       dueDate: DateTime.now().add(const Duration(hours: 12)),
       subject: 'Some Project 3',
@@ -45,10 +45,10 @@ class ProjectPageState extends State<ProjectPage> {
 
   List<TaskAssignment> allTasks = [
     TaskAssignment(
-        id: 14,
+        id: '14',
         createDate: DateTime.now(),
         subject: 'subtask under prj',
-        parentId: 1,
+        parentId: '1',
     )
   ];
 
@@ -134,7 +134,7 @@ class ProjectPageState extends State<ProjectPage> {
     });
   }
 
-  void _setProjectTasksCompletion(int projectId, bool completed) {
+  void _setProjectTasksCompletion(String projectId, bool completed) {
     // Find all tasks directly under this project
     final projectTasks = allTasks.where((t) => t.parentId == projectId).toList();
     for (var task in projectTasks) {
@@ -173,7 +173,7 @@ class ProjectPageState extends State<ProjectPage> {
     });
   }
 
-  void _setSubtasksCompletion(int parentId, bool completed) {
+  void _setSubtasksCompletion(String parentId, bool completed) {
     final childTasks = allTasks.where((t) => t.parentId == parentId).toList();
     for (var child in childTasks) {
       final index = allTasks.indexWhere((t) => t.id == child.id);
@@ -212,7 +212,7 @@ class ProjectPageState extends State<ProjectPage> {
     });
   }
 
-  void _removeAllDescendants(int parentId) {
+  void _removeAllDescendants(String parentId) {
     final children = allTasks.where((t) => t.parentId == parentId).toList();
     for (var child in children) {
       allTasks.removeWhere((t) => t.id == child.id);

@@ -25,22 +25,22 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
         throw UnsupportedError(
@@ -55,16 +55,15 @@ class DefaultFirebaseOptions {
     messagingSenderId: '726428342895',
     projectId: 'planner-app-6713f',
     authDomain: 'planner-app-6713f.firebaseapp.com',
-    storageBucket: 'planner-app-6713f.appspot.com',
+    storageBucket: 'planner-app-6713f.firebasestorage.app',
     measurementId: 'G-YQ7MFDZ0NB',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyADja2r8RSFUsww5X4SqJ7wiQID9SHHxN0',
-    appId: '1:726428342895:android:579d7013a972ff321ccb9a',
+    appId: '1:726428342895:android:97406c63f37f90a31ccb9a',
     messagingSenderId: '726428342895',
     projectId: 'planner-app-6713f',
-    storageBucket: 'planner-app-6713f.appspot.com',
+    storageBucket: 'planner-app-6713f.firebasestorage.app',
   );
-
 }
