@@ -18,6 +18,7 @@ class DetailPage extends StatefulWidget {
   final Function(TaskAssignment, bool?) onToggleTaskCompletion;
   final Function(TaskAssignment) onEditSubtask;
   final Function(TaskAssignment) onDeleteSubtask;
+  final Function(TaskAssignment) onAddSubtask;
 
   const DetailPage({
     Key? key,
@@ -29,6 +30,7 @@ class DetailPage extends StatefulWidget {
     required this.onToggleTaskCompletion,
     required this.onEditSubtask,
     required this.onDeleteSubtask,
+    required this.onAddSubtask,
   }) : super(key: key);
 
   @override
@@ -64,6 +66,15 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _buildSubList(BuildContext context) {
+    Future<void> _addSubtaskLocal() async{
+      TaskAssignment subtask = await widget.onAddSubtask(widget.assignment);
+      setState(() {
+        if(subtask != null) {
+          widget.subTasks.add(subtask);
+        }
+      });
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -81,6 +92,16 @@ class _DetailPageState extends State<DetailPage> {
           ),
           const SizedBox(height: 8),
           for (final subtask in widget.subTasks) _buildSubtaskRow(context, subtask),
+          ListTile(
+            leading: const Icon(Icons.add, color: Color.fromARGB(255, 23, 84, 140)),
+            title: const Text(
+              'Add a Subtask',
+              style: TextStyle(color: Color.fromARGB(255, 23, 84, 140), fontSize: 16),
+            ),
+            onTap: () {
+              _addSubtaskLocal();
+            },
+          ),
         ],
       ),
     );
@@ -266,7 +287,12 @@ class _DetailPageState extends State<DetailPage> {
           ),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () => widget.onDeleteSubtask(subtask),
+            onPressed: () {
+              widget.onDeleteSubtask(subtask);
+              setState(() {
+                widget.subTasks.removeWhere((task) => task.id == subtask.id);
+              });
+            },
             color: Colors.black,
           ),
         ],

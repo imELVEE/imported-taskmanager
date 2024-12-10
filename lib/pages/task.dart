@@ -171,9 +171,9 @@ class TaskPageState extends State<TaskPage> {
 
 
   // Add a subtask to a parent task
-  void _addSubtask(TaskAssignment parentTask) {
+  Future<TaskAssignment?> _addSubtask(TaskAssignment parentTask) async{
     // Show a TaskForm and set the parentId of the new task to parentTask.id
-    showDialog(
+    final TaskAssignment? newSubtask = await showDialog<TaskAssignment>(
       context: context,
       builder: (context) {
         return TaskForm(
@@ -188,6 +188,13 @@ class TaskPageState extends State<TaskPage> {
         );
       },
     );
+
+    if (newSubtask == null) {
+      return null;
+    }
+    else {
+      return newSubtask;
+    }
   }
 
   // Edit an existing subtask

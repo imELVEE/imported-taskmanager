@@ -44,7 +44,9 @@ class TaskWidget extends StatelessWidget {
               onTaskUpdate: onTaskUpdate,
               onToggleTaskCompletion: onToggleTaskCompletion,
               onEditSubtask: onEditSubtask,
-              onDeleteSubtask: onDeleteSubtask)
+              onAddSubtask: onAddSubtask,
+              onDeleteSubtask: onDeleteSubtask,
+            )
           )
       );
     }
