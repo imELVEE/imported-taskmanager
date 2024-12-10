@@ -62,17 +62,7 @@ class TaskPageState extends State<TaskPage> {
       body: TasksList(
         tasks: topLevelTasks,
         allTasks: tasks,
-        onTaskUpdate: (task) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return TaskForm(
-                task: task,
-                onSave: _updateTask,
-              );
-            },
-          );
-        },
+        onTaskUpdate: _updateTaskInformation,
         onDelete: _deleteTask,
         onAddSubtask: _addSubtask,
         onToggleSubtask: _toggleTaskCompletion,
@@ -116,6 +106,25 @@ class TaskPageState extends State<TaskPage> {
       }
     });
     return updatedTask;
+  }
+
+  Future<TaskAssignment?> _updateTaskInformation(TaskAssignment task) async{
+    final TaskAssignment? updatedTask = await showDialog<TaskAssignment>(
+      context: context,
+      builder: (context) {
+        return TaskForm(
+          task: task,
+          onSave: _updateTask,
+        );
+      },
+    );
+
+    if (updatedTask == null) {
+      return null;
+    }
+    else {
+      return updatedTask;
+    }
   }
 
   void _deleteTask(TaskAssignment taskToDelete) {

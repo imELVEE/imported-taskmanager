@@ -7,7 +7,7 @@ import 'package:planner_app/widgets/task_form.dart';
 
 
 class DetailPage extends StatefulWidget {
-  final dynamic assignment;
+  dynamic assignment;
   // assignment can be ProjectAssignment or TaskAssignment
   final List<TaskAssignment> subTasks;
 
@@ -20,7 +20,7 @@ class DetailPage extends StatefulWidget {
   final Function(TaskAssignment) onDeleteSubtask;
   final Function(TaskAssignment) onAddSubtask;
 
-  const DetailPage({
+  DetailPage({
     Key? key,
     required this.assignment,
     required this.subTasks,
@@ -300,7 +300,7 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  void _editAssignment(BuildContext context) {
+  void _editAssignment(BuildContext context) async{
     if (isProject()) {
       final project = widget.assignment as ProjectAssignment;
       // Ensure onProjectUpdate isn't null in project scenario
@@ -317,21 +317,9 @@ class _DetailPageState extends State<DetailPage> {
         },
       );
     } else {
-      final task = widget.assignment as TaskAssignment;
-      // Ensure onTaskUpdate isn't null in task scenario
-      showDialog(
-        context: context,
-        builder: (context) {
-          return TaskForm(
-            task: task,
-            onSave: (updatedTask) {
-              widget.onTaskUpdate?.call(updatedTask);
-              Navigator.pop(context);
-              return updatedTask;
-            },
-          );
-        },
-      );
+      TaskAssignment task = widget.assignment as TaskAssignment;
+      task = await widget.onTaskUpdate?.call(task);
+      setState(() => widget.assignment = task);
     }
   }
 }
