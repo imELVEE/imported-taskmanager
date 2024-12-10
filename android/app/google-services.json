@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:726428342895:android:579d7013a972ff321ccb9a",
         "android_client_info": {
-          "package_name": "com.example.planner_app"
+          "package_name": "planner_app_6713f.com.planner_app"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "726428342895-hvtlkud4k3cqkqalqlkllafcpkb2k6l8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.planner_app",
+            "package_name": "planner_app_6713f.com.planner_app",
             "certificate_hash": "907ff9cc602963cca506370c8a7dad1657cc3e59"
           }
         },
