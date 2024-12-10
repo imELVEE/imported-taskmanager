@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:planner_app/classes/task_assignment.dart';
 import 'package:date_time_format/date_time_format.dart';
+import 'package:planner_app/pages/single_assignment.dart';
 
 class TaskWidget extends StatelessWidget {
   final TaskAssignment task;
@@ -34,6 +35,20 @@ class TaskWidget extends StatelessWidget {
     'No Due Date' :
     task.dueDate!.format(DateTimeFormats.american);
 
+    void _navigateToDetails(){
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DetailPage(
+              assignment: task,
+              subTasks: subtasks,
+              onTaskUpdate: onTaskUpdate,
+              onToggleTaskCompletion: onToggleTaskCompletion,
+              onEditSubtask: onEditSubtask,
+              onDeleteSubtask: onDeleteSubtask)
+          )
+      );
+    }
+
     return Card(
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -43,6 +58,7 @@ class TaskWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
+              onTap: _navigateToDetails,
               tileColor: Colors.white,
               leading: Checkbox(
                 fillColor: const WidgetStatePropertyAll(Colors.white),

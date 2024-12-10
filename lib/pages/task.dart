@@ -100,20 +100,22 @@ class TaskPageState extends State<TaskPage> {
   }
 
   // Add new task to the list
-  void _addTask(TaskAssignment newTask) {
+  TaskAssignment _addTask(TaskAssignment newTask) {
     setState(() {
       tasks.add(newTask);
     });
+    return newTask;
   }
 
   // Update existing task
-  void _updateTask(TaskAssignment updatedTask) {
+  TaskAssignment _updateTask(TaskAssignment updatedTask) {
     setState(() {
       final index = tasks.indexWhere((task) => task.id == updatedTask.id);
       if (index != -1) {
         tasks[index] = updatedTask;
       }
     });
+    return updatedTask;
   }
 
   void _deleteTask(TaskAssignment taskToDelete) {
@@ -179,6 +181,7 @@ class TaskPageState extends State<TaskPage> {
               newSubtask.parentId = parentTask.id;
               tasks.add(newSubtask);
             });
+            return newSubtask;
           },
         );
       },
@@ -186,8 +189,8 @@ class TaskPageState extends State<TaskPage> {
   }
 
   // Edit an existing subtask
-  void _editSubtask(TaskAssignment subtask) {
-    showDialog(
+  Future<TaskAssignment?> _editSubtask(TaskAssignment subtask) async {
+    final TaskAssignment? updatedSubtask = await showDialog<TaskAssignment>(
       context: context,
       builder: (context) {
         return TaskForm(
@@ -196,6 +199,13 @@ class TaskPageState extends State<TaskPage> {
         );
       },
     );
+    print('Subject: ${updatedSubtask == null ? "Nothing" : updatedSubtask.subject}');
+    if (updatedSubtask == null){
+      return null;
+    }
+    else {
+      return updatedSubtask;
+    }
   }
 
   // Delete a subtask

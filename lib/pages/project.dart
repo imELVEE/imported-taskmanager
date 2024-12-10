@@ -156,6 +156,7 @@ class ProjectPageState extends State<ProjectPage> {
               newTask.parentId = project.id;
               allTasks.add(newTask);
             });
+            return newTask;
           },
         );
       },
@@ -198,6 +199,7 @@ class ProjectPageState extends State<ProjectPage> {
                 allTasks[index] = updatedTask;
               }
             });
+            return updatedTask;
           },
         );
       },

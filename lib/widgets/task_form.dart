@@ -6,7 +6,7 @@ import 'dart:convert';
 
 class TaskForm extends StatefulWidget {
   final TaskAssignment? task;
-  final void Function(TaskAssignment) onSave;
+  final TaskAssignment Function(TaskAssignment) onSave;
 
   const TaskForm({this.task, required this.onSave, Key? key}) : super(key: key);
 
@@ -193,7 +193,7 @@ class TaskFormState extends State<TaskForm> {
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
-              final newProject = TaskAssignment(
+              final newTask = TaskAssignment(
                 id: widget.task?.id ?? Uuid().v4(),
                 subject: _subject,
                 notes: _notes,
@@ -202,8 +202,8 @@ class TaskFormState extends State<TaskForm> {
                 createDate: _createDate,
                 parentId: widget.task?.parentId,
               );
-              widget.onSave(newProject);
-              Navigator.of(context).pop();
+              widget.onSave(newTask);
+              Navigator.pop(context, newTask);
             }
           },
           child: const Text('Save'),
