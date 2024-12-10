@@ -3,7 +3,6 @@ import 'package:planner_app/classes/project_assignment.dart';
 import 'package:planner_app/classes/task_assignment.dart';
 import 'package:planner_app/pages/login.dart';
 import 'package:planner_app/pages/home.dart';
-import 'package:planner_app/pages/calendar.dart';
 import 'package:planner_app/pages/support.dart';
 import 'package:planner_app/pages/task.dart';
 import 'package:planner_app/widgets/project_form.dart';
@@ -83,7 +82,7 @@ class ProjectPageState extends State<ProjectPage> {
             },
           );
         }, // Open form to add new task
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
 
       bottomNavigationBar: _bottomNavBar(),
