@@ -231,7 +231,7 @@ class TaskPageState extends State<TaskPage> {
         );
       },
     );
-    print('Subject: ${updatedSubtask == null ? "Nothing" : updatedSubtask.subject}');
+
     if (updatedSubtask == null){
       return null;
     }
