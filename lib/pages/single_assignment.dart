@@ -54,6 +54,7 @@ class _DetailPageState extends State<DetailPage> {
       ),
       body: _buildSubList(context),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 23, 84, 140),
         child: Icon(Icons.edit),
         onPressed: () {
           _editAssignment(context);
@@ -72,7 +73,11 @@ class _DetailPageState extends State<DetailPage> {
           const SizedBox(height: 16),
           Text(
             'Subtasks',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Color.fromARGB(255, 23, 84, 140),
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+            ),
           ),
           const SizedBox(height: 8),
           for (final subtask in widget.subTasks) _buildSubtaskRow(context, subtask),
@@ -94,6 +99,10 @@ class _DetailPageState extends State<DetailPage> {
         : DateTimeFormat.format(thisAssignment.dueDate!, format: DateTimeFormats.american);
 
     String formattedCreateDate = DateTimeFormat.format(thisAssignment.createDate!, format: DateTimeFormats.american);
+
+    String formattedCompleteDate = thisAssignment.completeDate == null
+        ? 'No Complete Date'
+        : DateTimeFormat.format(thisAssignment.completeDate!, format: DateTimeFormats.american);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,9 +145,6 @@ class _DetailPageState extends State<DetailPage> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
-                  decoration: thisAssignment.completed ? TextDecoration.lineThrough : null,
-                  decorationColor: Colors.red,
-                  decorationThickness: 2.0,
                 ),
               ),
             ),
@@ -158,9 +164,11 @@ class _DetailPageState extends State<DetailPage> {
             ),
         ),
         const SizedBox(height: 8),
-        Text('Due: ${formattedDueDate} | id: ${thisAssignment.id}',
+        Text(
+          'Due: ${formattedDueDate} | id: ${thisAssignment.id}'
+            + (thisAssignment.completed ? '\nCompleted: ${formattedCompleteDate}' : ''),
           style: TextStyle(
-            color: Colors.red,
+            color: thisAssignment.completed ? Colors.green : Colors.red,
             fontWeight: FontWeight.normal
           )
         ),
@@ -180,9 +188,12 @@ class _DetailPageState extends State<DetailPage> {
         ? DateTimeFormat.format(subtask.dueDate!, format: DateTimeFormats.american)
         : "No due date";
 
+    String subtaskCompleteText = subtask.completeDate != null
+        ? DateTimeFormat.format(subtask.completeDate!, format: DateTimeFormats.american)
+        : "No Complete Date";
+
     Future<void> _editSubtaskLocal() async {
       subtask = await widget.onEditSubtask(subtask);
-      print('Subject 2: ${subtask.subject}');
       setState(() {
         final index = widget.subTasks.indexWhere((t) => t.id == subtask.id);
         if (index != -1) {
@@ -193,6 +204,9 @@ class _DetailPageState extends State<DetailPage> {
 
     return ListTile(
       leading: Checkbox(
+        fillColor: subtask.completed
+        ? const WidgetStatePropertyAll(Color.fromARGB(204, 12, 198, 241))
+        : const WidgetStatePropertyAll(Colors.white),
         value: subtask.completed,
         onChanged: (value) {
           widget.onToggleTaskCompletion(subtask, value);
@@ -201,19 +215,44 @@ class _DetailPageState extends State<DetailPage> {
           });
         },
       ),
-      title: Text(
-        subtask.subject,
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          decoration: subtask.completed ? TextDecoration.lineThrough : null,
-          decorationColor: Colors.red,
-          decorationThickness: 2.0,
-        ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            subtask.subject,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (subtask.notes != null && subtask.notes!.isNotEmpty) // Display notes only if they exist
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Text(
+                'Description: ${subtask.notes!}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+        ],
       ),
-      subtitle: Text(
-        'DUE: ${subtaskDueText}',
-        style: const TextStyle(color: Colors.redAccent, fontSize: 15),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'DUE: ${subtaskDueText}',
+            style: TextStyle(
+                color: subtask.completed ? Colors.green : Colors.redAccent,
+                fontSize: 12
+            ),
+          ),
+          Text(
+            subtask.completed ? 'Completed: ${subtaskCompleteText}' : '',
+            style: const TextStyle(color: Colors.green, fontSize: 12),
+          ),
+        ],
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
