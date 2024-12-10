@@ -130,7 +130,17 @@ class ProjectPageState extends State<ProjectPage> {
   void _deleteProject(ProjectAssignment projectToDelete) {
     setState(() {
       projects.removeWhere((project) => project.id == projectToDelete.id);
+      _removeAllTasksUnderProject(projectToDelete.id);
     });
+  }
+
+  void _removeAllTasksUnderProject(String projectId) {
+    final projectTasks = allTasks.where((task) => task.parentId == projectId).toList();
+
+    for (final task in projectTasks) {
+      allTasks.removeWhere((t) => t.id == task.id);
+      _removeAllDescendants(task.id); // Recursively remove subtasks
+    }
   }
 
   void _toggleProjectCompletion(ProjectAssignment project, bool? value) {

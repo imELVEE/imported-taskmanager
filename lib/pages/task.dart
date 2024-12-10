@@ -130,7 +130,21 @@ class TaskPageState extends State<TaskPage> {
   void _deleteTask(TaskAssignment taskToDelete) {
     setState(() {
       tasks.removeWhere((task) => task.id == taskToDelete.id);
+      _deleteSubtasksRecursively(taskToDelete.id);
     });
+  }
+
+  void _deleteSubtasksRecursively(String parentId) {
+    // Find all subtasks with the given parentId
+    final childTasks = tasks.where((task) => task.parentId == parentId).toList();
+
+    for (final subtask in childTasks) {
+      // Remove the subtask
+      tasks.remove(subtask);
+
+      // Recursively remove its subtasks
+      _deleteSubtasksRecursively(subtask.id);
+    }
   }
 
   void _toggleTaskCompletion(TaskAssignment task, bool? value) {

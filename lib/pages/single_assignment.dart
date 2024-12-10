@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:planner_app/classes/project_assignment.dart';
 import 'package:planner_app/classes/task_assignment.dart';
-import 'package:planner_app/widgets/project_form.dart';
 
 class DetailPage extends StatefulWidget {
   dynamic assignment;
@@ -183,7 +182,7 @@ class DetailPageState extends State<DetailPage> {
           ],
         ),
         Text(
-          thisAssignment.notes != null
+          thisAssignment.notes != null && thisAssignment.notes != ''
               ? 'Description: ' + thisAssignment.notes
               : 'No Description',
           style: thisAssignment.notes == null
@@ -259,17 +258,18 @@ class DetailPageState extends State<DetailPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          if (subtask.notes != null) // Display notes only if they exist
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Text(
-                'Description: ${subtask.notes!}',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Text(
+              subtask.notes != null && subtask.notes != ''
+              ? 'Description: ${subtask.notes!}'
+              : 'No Description',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
               ),
             ),
+          ),
         ],
       ),
       subtitle: Column(
