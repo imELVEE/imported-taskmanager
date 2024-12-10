@@ -21,20 +21,20 @@ class ProjectPageState extends State<ProjectPage> {
   int _currentIndex = 0;
   List<ProjectAssignment> projects = [
     ProjectAssignment(
-      id: 1,
+      id: '1',
       createDate: DateTime.now(),
       dueDate: DateTime.now().add(const Duration(hours: 24)),
       subject: 'Flutter Project',
       notes: 'Do Mobile App',
     ),
     ProjectAssignment(
-      id: 2,
+      id: '2',
       createDate: DateTime.now().subtract(const Duration(hours: 8)),
       dueDate: DateTime.now().add(const Duration(hours: 36)),
       subject: 'Some Project 2',
     ),
     ProjectAssignment(
-      id: 3,
+      id: '3',
       createDate: DateTime.now().subtract(const Duration(hours: 39)),
       dueDate: DateTime.now().add(const Duration(hours: 12)),
       subject: 'Some Project 3',
@@ -45,10 +45,10 @@ class ProjectPageState extends State<ProjectPage> {
 
   List<TaskAssignment> allTasks = [
     TaskAssignment(
-        id: 14,
+        id: '14',
         createDate: DateTime.now(),
         subject: 'subtask under prj',
-        parentId: 1,
+        parentId: '1',
     )
   ];
 
@@ -62,17 +62,7 @@ class ProjectPageState extends State<ProjectPage> {
       body: ProjectsList(
         projects: projects,
         allTasks: allTasks,
-        onProjectUpdate: (project) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return ProjectForm(
-                project: project,
-                onSave: _updateProject,
-              );
-            },
-          );
-        },
+        onProjectUpdate: _updateProjectInformation,
         onDelete: _deleteProject,
 
         onAddTask: _addTaskToProject,
@@ -108,19 +98,49 @@ class ProjectPageState extends State<ProjectPage> {
   }
 
   // Update existing project
-  void _updateProject(ProjectAssignment updatedProject) {
+  ProjectAssignment _updateProject(ProjectAssignment updatedProject) {
     setState(() {
       final index = projects.indexWhere((project) => project.id == updatedProject.id);
       if (index != -1) {
         projects[index] = updatedProject;
       }
     });
+    return updatedProject;
+  }
+
+  Future<ProjectAssignment?> _updateProjectInformation(ProjectAssignment project) async {
+    final ProjectAssignment? updatedProject = await showDialog<ProjectAssignment>(
+      context: context,
+      builder: (context) {
+        return ProjectForm(
+          project: project,
+          onSave: _updateProject,
+        );
+      },
+    );
+
+    if (updatedProject == null){
+      return null;
+    }
+    else {
+      return updatedProject;
+    }
   }
 
   void _deleteProject(ProjectAssignment projectToDelete) {
     setState(() {
       projects.removeWhere((project) => project.id == projectToDelete.id);
+      _removeAllTasksUnderProject(projectToDelete.id);
     });
+  }
+
+  void _removeAllTasksUnderProject(String projectId) {
+    final projectTasks = allTasks.where((task) => task.parentId == projectId).toList();
+
+    for (final task in projectTasks) {
+      allTasks.removeWhere((t) => t.id == task.id);
+      _removeAllDescendants(task.id); // Recursively remove subtasks
+    }
   }
 
   void _toggleProjectCompletion(ProjectAssignment project, bool? value) {
@@ -128,26 +148,30 @@ class ProjectPageState extends State<ProjectPage> {
       final pIndex = projects.indexWhere((p) => p.id == project.id);
       if (pIndex != -1) {
         projects[pIndex].completed = value ?? false;
+        projects[pIndex].completeDate = value ?? false ? DateTime.now() : null;
         // If you want to also propagate completion state to all tasks of this project:
         _setProjectTasksCompletion(project.id, value ?? false);
       }
     });
   }
 
-  void _setProjectTasksCompletion(int projectId, bool completed) {
+  void _setProjectTasksCompletion(String projectId, bool completed) {
     // Find all tasks directly under this project
     final projectTasks = allTasks.where((t) => t.parentId == projectId).toList();
     for (var task in projectTasks) {
       final index = allTasks.indexWhere((t) => t.id == task.id);
       if (index != -1) {
-        allTasks[index] = allTasks[index].copyWith(completed: completed);
+        allTasks[index] = allTasks[index].copyWith(
+            completed: completed,
+            completeDate: completed ? DateTime.now() : null
+        );
         _setSubtasksCompletion(allTasks[index].id, completed);
       }
     }
   }
 
-  void _addTaskToProject(ProjectAssignment project) {
-    showDialog(
+  Future<TaskAssignment?> _addTaskToProject(ProjectAssignment project) async{
+    final TaskAssignment? newSubtask = await showDialog<TaskAssignment>(
       context: context,
       builder: (context) {
         return TaskForm(
@@ -156,10 +180,18 @@ class ProjectPageState extends State<ProjectPage> {
               newTask.parentId = project.id;
               allTasks.add(newTask);
             });
+            return newTask;
           },
         );
       },
     );
+
+    if (newSubtask == null) {
+      return null;
+    }
+    else {
+      return newSubtask;
+    }
   }
 
   // Toggle top-level task completion (and optionally its subtasks)
@@ -167,26 +199,32 @@ class ProjectPageState extends State<ProjectPage> {
     setState(() {
       final index = allTasks.indexWhere((t) => t.id == task.id);
       if (index != -1) {
-        allTasks[index] = allTasks[index].copyWith(completed: value ?? false);
+        allTasks[index] = allTasks[index].copyWith(
+            completed: value ?? false,
+            completeDate: value ?? false ? DateTime.now() : null
+        );
         _setSubtasksCompletion(allTasks[index].id, value ?? false);
       }
     });
   }
 
-  void _setSubtasksCompletion(int parentId, bool completed) {
+  void _setSubtasksCompletion(String parentId, bool completed) {
     final childTasks = allTasks.where((t) => t.parentId == parentId).toList();
     for (var child in childTasks) {
       final index = allTasks.indexWhere((t) => t.id == child.id);
       if (index != -1) {
-        allTasks[index] = allTasks[index].copyWith(completed: completed);
+        allTasks[index] = allTasks[index].copyWith(
+            completed: completed,
+            completeDate: completed ? DateTime.now() : null
+        );
         _setSubtasksCompletion(allTasks[index].id, completed);
       }
     }
   }
 
   // Edit a top-level task or subtask
-  void _editTask(TaskAssignment task) {
-    showDialog(
+  Future<TaskAssignment?> _editTask(TaskAssignment task) async{
+    final TaskAssignment? updatedSubtask = await showDialog<TaskAssignment>(
       context: context,
       builder: (context) {
         return TaskForm(
@@ -198,10 +236,18 @@ class ProjectPageState extends State<ProjectPage> {
                 allTasks[index] = updatedTask;
               }
             });
+            return updatedTask;
           },
         );
       },
     );
+
+    if (updatedSubtask == null){
+      return null;
+    }
+    else {
+      return updatedSubtask;
+    }
   }
 
   // Delete a top-level task
@@ -212,7 +258,7 @@ class ProjectPageState extends State<ProjectPage> {
     });
   }
 
-  void _removeAllDescendants(int parentId) {
+  void _removeAllDescendants(String parentId) {
     final children = allTasks.where((t) => t.parentId == parentId).toList();
     for (var child in children) {
       allTasks.removeWhere((t) => t.id == child.id);

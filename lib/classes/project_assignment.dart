@@ -1,6 +1,6 @@
 
 class ProjectAssignment {
-  int id;
+  String id;
   DateTime createDate;
   String subject;
   String? notes;

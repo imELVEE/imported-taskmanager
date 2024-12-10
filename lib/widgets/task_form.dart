@@ -6,7 +6,7 @@ import 'dart:convert';
 
 class TaskForm extends StatefulWidget {
   final TaskAssignment? task;
-  final void Function(TaskAssignment) onSave;
+  final TaskAssignment Function(TaskAssignment) onSave;
 
   const TaskForm({this.task, required this.onSave, Key? key}) : super(key: key);
 
@@ -24,21 +24,6 @@ class TaskFormState extends State<TaskForm> {
 
   DateTime? _completeDate;
   late bool _completed = false;
-
-  int generateIntFromUUID() {
-    var uuid = const Uuid();
-    String uuidString = uuid.v4();
-    final buffer = List<int>.filled(16, 0);
-    List<int> rawBytes = uuid.v4buffer(buffer); // Gets a 16-byte list representing the UUID
-    // Construct a 64-bit integer from the first 8 bytes:
-    int intId = 0;
-    for (int i = 0; i < 8; i++) {
-      intId = (intId << 8) | rawBytes[i];
-    }
-    intId = intId & 0x7FFFFFFFFFFFFFFF; //ensure positive
-
-    return intId;
-  }
 
   Future<void> _selectDateTime(BuildContext context, DateTime? currentDate, Function(DateTime) onDatePicked) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -208,8 +193,8 @@ class TaskFormState extends State<TaskForm> {
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
-              final newProject = TaskAssignment(
-                id: widget.task?.id ?? generateIntFromUUID(),
+              final newTask = TaskAssignment(
+                id: widget.task?.id ?? Uuid().v4(),
                 subject: _subject,
                 notes: _notes,
                 completed: _completed,
@@ -217,8 +202,8 @@ class TaskFormState extends State<TaskForm> {
                 createDate: _createDate,
                 parentId: widget.task?.parentId,
               );
-              widget.onSave(newProject);
-              Navigator.of(context).pop();
+              widget.onSave(newTask);
+              Navigator.pop(context, newTask);
             }
           },
           child: const Text('Save'),

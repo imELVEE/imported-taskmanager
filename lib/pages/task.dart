@@ -18,20 +18,20 @@ class TaskPageState extends State<TaskPage> {
   int _currentIndex = 0;
   List<TaskAssignment> tasks = [
     TaskAssignment(
-      id: 4,
+      id: '4',
       createDate: DateTime.now(),
       dueDate: DateTime.now().add(const Duration(hours: 24)),
       subject: 'Drink Water',
       notes: 'Fill glass.',
     ),
     TaskAssignment(
-      id: 5,
+      id: '5',
       createDate: DateTime.now().subtract(const Duration(hours: 8)),
       dueDate: DateTime.now().add(const Duration(hours: 36)),
       subject: 'Some Task 2',
     ),
     TaskAssignment(
-      id: 6,
+      id: '6',
       createDate: DateTime.now().subtract(const Duration(hours: 39)),
       dueDate: DateTime.now().add(const Duration(hours: 12)),
       subject: 'Finish tasks class/widget',
@@ -40,13 +40,13 @@ class TaskPageState extends State<TaskPage> {
     ),
     //Subtasks
     TaskAssignment(
-      id: 7,
+      id: '7',
       createDate: DateTime.now().subtract(const Duration(hours: 39)),
       dueDate: DateTime.now().add(const Duration(hours: 12)),
       subject: 'Fill Water Glass',
       notes: 'blah blah',
       completed: true,
-      parentId: 4
+      parentId: '4'
     ),
   ];
 
@@ -62,17 +62,7 @@ class TaskPageState extends State<TaskPage> {
       body: TasksList(
         tasks: topLevelTasks,
         allTasks: tasks,
-        onTaskUpdate: (task) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return TaskForm(
-                task: task,
-                onSave: _updateTask,
-              );
-            },
-          );
-        },
+        onTaskUpdate: _updateTaskInformation,
         onDelete: _deleteTask,
         onAddSubtask: _addSubtask,
         onToggleSubtask: _toggleTaskCompletion,
@@ -100,26 +90,61 @@ class TaskPageState extends State<TaskPage> {
   }
 
   // Add new task to the list
-  void _addTask(TaskAssignment newTask) {
+  TaskAssignment _addTask(TaskAssignment newTask) {
     setState(() {
       tasks.add(newTask);
     });
+    return newTask;
   }
 
   // Update existing task
-  void _updateTask(TaskAssignment updatedTask) {
+  TaskAssignment _updateTask(TaskAssignment updatedTask) {
     setState(() {
       final index = tasks.indexWhere((task) => task.id == updatedTask.id);
       if (index != -1) {
         tasks[index] = updatedTask;
       }
     });
+    return updatedTask;
+  }
+
+  Future<TaskAssignment?> _updateTaskInformation(TaskAssignment task) async{
+    final TaskAssignment? updatedTask = await showDialog<TaskAssignment>(
+      context: context,
+      builder: (context) {
+        return TaskForm(
+          task: task,
+          onSave: _updateTask,
+        );
+      },
+    );
+
+    if (updatedTask == null) {
+      return null;
+    }
+    else {
+      return updatedTask;
+    }
   }
 
   void _deleteTask(TaskAssignment taskToDelete) {
     setState(() {
       tasks.removeWhere((task) => task.id == taskToDelete.id);
+      _deleteSubtasksRecursively(taskToDelete.id);
     });
+  }
+
+  void _deleteSubtasksRecursively(String parentId) {
+    // Find all subtasks with the given parentId
+    final childTasks = tasks.where((task) => task.parentId == parentId).toList();
+
+    for (final subtask in childTasks) {
+      // Remove the subtask
+      tasks.remove(subtask);
+
+      // Recursively remove its subtasks
+      _deleteSubtasksRecursively(subtask.id);
+    }
   }
 
   void _toggleTaskCompletion(TaskAssignment task, bool? value) {
@@ -133,6 +158,7 @@ class TaskPageState extends State<TaskPage> {
           subject: tasks[index].subject,
           notes: tasks[index].notes,
           completed: value ?? false,
+          completeDate: value ?? false ? DateTime.now() : null,
           parentId: tasks[index].parentId,
         );
       }
@@ -141,7 +167,7 @@ class TaskPageState extends State<TaskPage> {
     });
   }
 
-  void _setSubtasksCompletion(int parentId, bool completed) {
+  void _setSubtasksCompletion(String parentId, bool completed) {
     // Find all tasks whose parentId matches parentId
     final childTasks = tasks.where((t) => t.parentId == parentId).toList();
 
@@ -156,6 +182,7 @@ class TaskPageState extends State<TaskPage> {
           subject: tasks[index].subject,
           notes: tasks[index].notes,
           completed: completed,
+          completeDate: completed ? DateTime.now() : null,
           parentId: tasks[index].parentId,
         );
       }
@@ -167,9 +194,9 @@ class TaskPageState extends State<TaskPage> {
 
 
   // Add a subtask to a parent task
-  void _addSubtask(TaskAssignment parentTask) {
+  Future<TaskAssignment?> _addSubtask(TaskAssignment parentTask) async{
     // Show a TaskForm and set the parentId of the new task to parentTask.id
-    showDialog(
+    final TaskAssignment? newSubtask = await showDialog<TaskAssignment>(
       context: context,
       builder: (context) {
         return TaskForm(
@@ -179,15 +206,23 @@ class TaskPageState extends State<TaskPage> {
               newSubtask.parentId = parentTask.id;
               tasks.add(newSubtask);
             });
+            return newSubtask;
           },
         );
       },
     );
+
+    if (newSubtask == null) {
+      return null;
+    }
+    else {
+      return newSubtask;
+    }
   }
 
   // Edit an existing subtask
-  void _editSubtask(TaskAssignment subtask) {
-    showDialog(
+  Future<TaskAssignment?> _editSubtask(TaskAssignment subtask) async {
+    final TaskAssignment? updatedSubtask = await showDialog<TaskAssignment>(
       context: context,
       builder: (context) {
         return TaskForm(
@@ -196,6 +231,13 @@ class TaskPageState extends State<TaskPage> {
         );
       },
     );
+    print('Subject: ${updatedSubtask == null ? "Nothing" : updatedSubtask.subject}');
+    if (updatedSubtask == null){
+      return null;
+    }
+    else {
+      return updatedSubtask;
+    }
   }
 
   // Delete a subtask

@@ -1,6 +1,6 @@
 
 class TaskAssignment {
-  int id;
+  String id;
   DateTime createDate;
   String subject;
   String? notes;
@@ -9,7 +9,7 @@ class TaskAssignment {
   DateTime? completeDate;
   bool completed;
 
-  int? parentId; // Null for top-level tasks, or the id of the parent task
+  String? parentId; // Null for top-level tasks, or the id of the parent task
 
   TaskAssignment({
     required this.id,
@@ -24,10 +24,11 @@ class TaskAssignment {
 
   TaskAssignment copyWith({
     bool? completed,
+    DateTime? completeDate,
     String? subject,
     String? notes,
     DateTime? dueDate,
-    int? parentId,
+    String? parentId,
   }) {
     return TaskAssignment(
       id: id,
@@ -37,7 +38,7 @@ class TaskAssignment {
       subject: subject ?? this.subject,
       notes: notes ?? this.notes,
       completed: completed ?? this.completed,
-      completeDate: completeDate,
+      completeDate: completeDate ?? this.completeDate,
     );
   }
 }

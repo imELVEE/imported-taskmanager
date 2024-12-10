@@ -2,7 +2,6 @@ import 'package:planner_app/classes/project_assignment.dart';
 import 'package:flutter/material.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:uuid/uuid.dart';
-import 'dart:convert';
 
 class ProjectForm extends StatefulWidget {
   final ProjectAssignment? project;
@@ -24,21 +23,6 @@ class ProjectFormState extends State<ProjectForm> {
 
   DateTime? _completeDate;
   late bool _completed = false;
-
-  int generateIntFromUUID() {
-    var uuid = const Uuid();
-    String uuidString = uuid.v4();
-    final buffer = List<int>.filled(16, 0);
-    List<int> rawBytes = uuid.v4buffer(buffer); // Gets a 16-byte list representing the UUID
-    // Construct a 64-bit integer from the first 8 bytes:
-    int intId = 0;
-    for (int i = 0; i < 8; i++) {
-      intId = (intId << 8) | rawBytes[i];
-    }
-    intId = intId & 0x7FFFFFFFFFFFFFFF; //ensure positive
-
-    return intId;
-  }
 
   Future<void> _selectDateTime(BuildContext context, DateTime? currentDate, Function(DateTime) onDatePicked) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -209,7 +193,7 @@ class ProjectFormState extends State<ProjectForm> {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
               final newProject = ProjectAssignment(
-                id: widget.project?.id ?? generateIntFromUUID(),
+                id: widget.project?.id ?? Uuid().v4(),
                 subject: _subject,
                 notes: _notes,
                 completed: _completed,
@@ -217,7 +201,7 @@ class ProjectFormState extends State<ProjectForm> {
                 createDate: _createDate,
               );
               widget.onSave(newProject);
-              Navigator.of(context).pop();
+              Navigator.pop(context, newProject);
             }
           },
           child: const Text('Save'),

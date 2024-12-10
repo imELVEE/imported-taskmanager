@@ -44,7 +44,7 @@ class ProjectsList extends StatelessWidget {
             allTasks: allTasks,
             onAddTask: onAddTask,
             onToggleTaskCompletion: onToggleTaskCompletion,
-          onToggleProjectCompletion: onToggleProjectCompletion,
+            onToggleProjectCompletion: onToggleProjectCompletion,
             onEditTask: onEditTask,
             onDeleteTask: onDeleteTask,
             key: ValueKey(projects[index].id),
