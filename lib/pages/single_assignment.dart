@@ -3,8 +3,6 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:planner_app/classes/project_assignment.dart';
 import 'package:planner_app/classes/task_assignment.dart';
 import 'package:planner_app/widgets/project_form.dart';
-import 'package:planner_app/widgets/task_form.dart';
-
 
 class DetailPage extends StatefulWidget {
   dynamic assignment;
@@ -34,10 +32,10 @@ class DetailPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DetailPageState createState() => _DetailPageState();
+  DetailPageState createState() => DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class DetailPageState extends State<DetailPage> {
 
   bool isProject() {
     return widget.assignment is ProjectAssignment;
@@ -57,7 +55,7 @@ class _DetailPageState extends State<DetailPage> {
       body: _buildSubList(context),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 23, 84, 140),
-        child: Icon(Icons.edit),
+        child: const Icon(Icons.edit),
         onPressed: () {
           _editAssignment(context);
         },
@@ -82,9 +80,9 @@ class _DetailPageState extends State<DetailPage> {
         children: [
           _buildHeader(context),
           const SizedBox(height: 16),
-          Text(
+          const Text(
             'Subtasks',
-            style: const TextStyle(
+            style: TextStyle(
                 color: Color.fromARGB(255, 23, 84, 140),
                 fontSize: 18,
                 fontWeight: FontWeight.bold
@@ -108,7 +106,7 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    final thisAssignment;
+    final dynamic thisAssignment;
     if (isProject()) {
       thisAssignment = widget.assignment as ProjectAssignment;
     } else {
@@ -133,14 +131,15 @@ class _DetailPageState extends State<DetailPage> {
             Checkbox(
               fillColor: const WidgetStatePropertyAll(Colors.white),
               side: WidgetStateBorderSide.resolveWith((states) {
-                if (states.contains(WidgetState.selected))
+                if (states.contains(WidgetState.selected)) {
                   return const BorderSide(color: Colors.black);
-                else
+                } else {
                   return const BorderSide(color: Colors.blue);
+                }
               }
               ),
               checkColor: Colors.black,
-              value: thisAssignment.completed,
+              value: thisAssignment.completed ?? false,
               onChanged: (value) {
                 // Change state in parent widget
                 if (isProject()) {
@@ -162,7 +161,7 @@ class _DetailPageState extends State<DetailPage> {
             Expanded(
               child: Text(
                 thisAssignment.subject,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -172,7 +171,9 @@ class _DetailPageState extends State<DetailPage> {
           ],
         ),
         Text(
-          'Description: ' + thisAssignment.notes ?? 'No description',
+          thisAssignment.notes != null
+              ? 'Description: ' + thisAssignment.notes
+              : 'No Description',
           style: thisAssignment.notes == null
             ? const TextStyle(
               fontStyle: FontStyle.italic,
@@ -189,13 +190,13 @@ class _DetailPageState extends State<DetailPage> {
           'Due: ${formattedDueDate} | id: ${thisAssignment.id}'
             + (thisAssignment.completed ? '\nCompleted: ${formattedCompleteDate}' : ''),
           style: TextStyle(
-            color: thisAssignment.completed ? Colors.green : Colors.red,
+            color: thisAssignment.completed ?? false ? Colors.green : Colors.red,
             fontWeight: FontWeight.normal
           )
         ),
         const SizedBox(height: 8),
         Text('Created On: ${formattedCreateDate}',
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.normal
             )
@@ -241,12 +242,12 @@ class _DetailPageState extends State<DetailPage> {
         children: [
           Text(
             subtask.subject,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
-          if (subtask.notes != null && subtask.notes!.isNotEmpty) // Display notes only if they exist
+          if (subtask.notes != null) // Display notes only if they exist
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child: Text(
