@@ -19,20 +19,29 @@ class _LoginPageState extends State<LoginPage> {
   final GoogleAuth _googleAuth = GoogleAuth();
 
 void _googleSignIn() async {
-  try {
-    final user = await _googleAuth.googleSignIn();
-    if (user != null) {
-      // Check if the widget is still mounted before navigating
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
-      }
-    }
-  } catch (e) {
-    // Handle any errors that may occur
-    print('Error during Google Sign-In: $e');
+  final user = await _googleAuth.googleSignIn();
+  if (user != null) {
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Login Successful with Google!'),
+        backgroundColor: Color.fromARGB(119, 144, 196, 255),
+      ),
+    );
+
+    // Navigate to HomePage
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  } else {
+    // Show error message if the login failed
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Google Login failed. Please try again.'),
+        backgroundColor: Color.fromARGB(119, 144, 196, 255),
+      ),
+    );
   }
 }
 
@@ -66,13 +75,14 @@ void _googleSignIn() async {
   );
 
   // Only navigate if sign-in was successful
-  if (info == "Login Successful") {
+  if (info == "Login Successfully") {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 }
+
 
 void _forgotPassword() { // Reset Password
   showDialog(
