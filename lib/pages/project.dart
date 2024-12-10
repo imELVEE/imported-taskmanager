@@ -62,17 +62,7 @@ class ProjectPageState extends State<ProjectPage> {
       body: ProjectsList(
         projects: projects,
         allTasks: allTasks,
-        onProjectUpdate: (project) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return ProjectForm(
-                project: project,
-                onSave: _updateProject,
-              );
-            },
-          );
-        },
+        onProjectUpdate: _updateProjectInformation,
         onDelete: _deleteProject,
 
         onAddTask: _addTaskToProject,
@@ -108,13 +98,33 @@ class ProjectPageState extends State<ProjectPage> {
   }
 
   // Update existing project
-  void _updateProject(ProjectAssignment updatedProject) {
+  ProjectAssignment _updateProject(ProjectAssignment updatedProject) {
     setState(() {
       final index = projects.indexWhere((project) => project.id == updatedProject.id);
       if (index != -1) {
         projects[index] = updatedProject;
       }
     });
+    return updatedProject;
+  }
+
+  Future<ProjectAssignment?> _updateProjectInformation(ProjectAssignment project) async {
+    final ProjectAssignment? updatedProject = await showDialog<ProjectAssignment>(
+      context: context,
+      builder: (context) {
+        return ProjectForm(
+          project: project,
+          onSave: _updateProject,
+        );
+      },
+    );
+
+    if (updatedProject == null){
+      return null;
+    }
+    else {
+      return updatedProject;
+    }
   }
 
   void _deleteProject(ProjectAssignment projectToDelete) {
@@ -150,8 +160,8 @@ class ProjectPageState extends State<ProjectPage> {
     }
   }
 
-  void _addTaskToProject(ProjectAssignment project) {
-    showDialog(
+  Future<TaskAssignment?> _addTaskToProject(ProjectAssignment project) async{
+    final TaskAssignment? newSubtask = await showDialog<TaskAssignment>(
       context: context,
       builder: (context) {
         return TaskForm(
@@ -165,6 +175,13 @@ class ProjectPageState extends State<ProjectPage> {
         );
       },
     );
+
+    if (newSubtask == null) {
+      return null;
+    }
+    else {
+      return newSubtask;
+    }
   }
 
   // Toggle top-level task completion (and optionally its subtasks)
@@ -193,8 +210,8 @@ class ProjectPageState extends State<ProjectPage> {
   }
 
   // Edit a top-level task or subtask
-  void _editTask(TaskAssignment task) {
-    showDialog(
+  Future<TaskAssignment?> _editTask(TaskAssignment task) async{
+    final TaskAssignment? updatedSubtask = await showDialog<TaskAssignment>(
       context: context,
       builder: (context) {
         return TaskForm(
@@ -211,6 +228,13 @@ class ProjectPageState extends State<ProjectPage> {
         );
       },
     );
+
+    if (updatedSubtask == null){
+      return null;
+    }
+    else {
+      return updatedSubtask;
+    }
   }
 
   // Delete a top-level task

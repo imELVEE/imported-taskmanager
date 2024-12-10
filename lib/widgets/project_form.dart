@@ -201,7 +201,7 @@ class ProjectFormState extends State<ProjectForm> {
                 createDate: _createDate,
               );
               widget.onSave(newProject);
-              Navigator.of(context).pop();
+              Navigator.pop(context, newProject);
             }
           },
           child: const Text('Save'),

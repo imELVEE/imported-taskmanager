@@ -307,20 +307,9 @@ class DetailPageState extends State<DetailPage> {
 
   void _editAssignment(BuildContext context) async{
     if (isProject()) {
-      final project = widget.assignment as ProjectAssignment;
-      // Ensure onProjectUpdate isn't null in project scenario
-      showDialog(
-        context: context,
-        builder: (context) {
-          return ProjectForm(
-            project: project,
-            onSave: (updatedProject) {
-              widget.onProjectUpdate?.call(updatedProject);
-              Navigator.pop(context);
-            },
-          );
-        },
-      );
+      ProjectAssignment project = widget.assignment as ProjectAssignment;
+      project = await widget.onProjectUpdate?.call(project);
+      setState(() => widget.assignment = project);
     } else {
       TaskAssignment task = widget.assignment as TaskAssignment;
       task = await widget.onTaskUpdate?.call(task);
