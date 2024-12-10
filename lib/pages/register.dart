@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:planner_app/authentication/email.dart'; // Assuming this is the path for EmailAuth class
+import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/login.dart'; // Login page after registration
 
 class Register extends StatefulWidget {
@@ -44,7 +45,7 @@ class _RegisterState extends State<Register> {
     if (info == "Registration Successful") {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     }
   }

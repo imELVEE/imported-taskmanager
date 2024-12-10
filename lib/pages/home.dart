@@ -74,7 +74,7 @@ class HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               Text(
-                'Email: ${_currentUser!.email ?? "No Email"}',
+                'Email:${_currentUser!.email ?? "No Email"}',
                 style: TextStyle(fontSize: 20, color: Colors.black),
               ),
             ],
