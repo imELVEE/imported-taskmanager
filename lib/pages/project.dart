@@ -189,7 +189,10 @@ class ProjectPageState extends State<ProjectPage> {
     setState(() {
       final index = allTasks.indexWhere((t) => t.id == task.id);
       if (index != -1) {
-        allTasks[index] = allTasks[index].copyWith(completed: value ?? false);
+        allTasks[index] = allTasks[index].copyWith(
+            completed: value ?? false,
+            completeDate: value ?? false ? DateTime.now() : null
+        );
         _setSubtasksCompletion(allTasks[index].id, value ?? false);
       }
     });

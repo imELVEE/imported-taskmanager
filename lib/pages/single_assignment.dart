@@ -67,7 +67,15 @@ class DetailPageState extends State<DetailPage> {
 
   Widget _buildSubList(BuildContext context) {
     Future<void> _addSubtaskLocal() async{
-      if (isTask()) {
+      if (isProject()) {
+        TaskAssignment subtask = await widget.onAddTask?.call(widget.assignment);
+        setState(() {
+          if (subtask != null) {
+            widget.subTasks.add(subtask);
+          }
+        });
+      }
+      else {
         TaskAssignment subtask = await widget.onAddSubtask?.call(widget.assignment);
         setState(() {
           if (subtask != null) {
