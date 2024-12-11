@@ -152,6 +152,31 @@ class _LogOutPageState extends State<LogOutPage> {
                 ),
               ),
             ),
+            const SizedBox(height: 15),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white, 
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero, 
+                  side: BorderSide(color: Colors.purple), 
+                ),
+                elevation: 0, // Remove shadow
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 40), 
+              ),
+              child: const Text(
+                "Go Back To Home Page",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.purple, 
+                ),
+              ),
+            ),
           ],
         ),
       ),

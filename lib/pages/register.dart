@@ -14,7 +14,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  // Function to handle user registration
+  // User registration
   Future<void> _userSignUp() async {
     String info = await EmailAuth().userRegister(
       email: emailController.text,

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:planner_app/pages/login.dart';
+import 'package:planner_app/pages/logout.dart';
 import 'package:planner_app/pages/support.dart';
 import 'package:planner_app/pages/task.dart';
 import 'package:planner_app/pages/project.dart';
@@ -107,10 +108,15 @@ class HomePageState extends State<HomePage> {
       backgroundColor: const Color.fromARGB(255, 3, 64, 113),
       title: const Text('Planner App Home'),
       actions: <Widget>[
-        TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
-      ],
-    );
-  }
+        if (_currentUser != null) ...[
+        TextButton(onPressed: _logOutPageRoute, child: const Text('LOGOUT')),
+      ]
+      else  ...[
+          TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
+        ]
+    ],
+  );
+}
 
   Widget _bottomNavBar() {
     return BottomNavigationBar(
@@ -172,6 +178,12 @@ class HomePageState extends State<HomePage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const ProjectPage()),
+    );
+  }
+    void _logOutPageRoute() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LogOutPage()),
     );
   }
 }
