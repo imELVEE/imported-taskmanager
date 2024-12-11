@@ -80,10 +80,16 @@ class HomePageState extends State<HomePage> {
             const SizedBox(height: 20),
             // Display current user info
             if (_currentUser != null) ...[
+              const Text(
+                'You have successfully logged in',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              const SizedBox(height: 2),
               Text(
-                'Username: ${_currentUser!.displayName ?? "No Username"}',
+                'Username: ${_currentUser!.displayName ?? _currentUser!.email?.split('@').first ?? "No Username"}',
                 style: const TextStyle(fontSize: 20, color: Colors.black),
               ),
+              const SizedBox(height: 2),
               Text(
                 'Email:${_currentUser!.email ?? "No Email"}',
                 style: const TextStyle(fontSize: 20, color: Colors.black),

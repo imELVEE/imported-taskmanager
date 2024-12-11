@@ -100,7 +100,7 @@ class _LogOutPageState extends State<LogOutPage> {
               child: SignInButton(
                 Buttons.email,
                 text: "Email Sign Out",
-                onPressed: _emailSignOut, // Call the email sign-out method
+                onPressed: _emailSignOut, 
               ),
             ),
             const SizedBox(height: 15),
@@ -111,18 +111,18 @@ class _LogOutPageState extends State<LogOutPage> {
               child: SignInButton(
                 Buttons.google,
                 text: "Google Sign Out",
-                onPressed: _googleSignOut, // Call the Google sign-out method
+                onPressed: _googleSignOut,
               ),
             ),
             const SizedBox(height: 15),
             
-            // Microsoft Logout Button
+            // Twitter Logout Button
             Transform.scale(
               scale: 1.2,
               child: SignInButton(
                 Buttons.twitter,
                 text: "Twitter Sign Out",
-                onPressed:(){} // Call the Microsoft sign-out method
+                onPressed:(){} 
               ),
             ),
             const SizedBox(height: 15),
@@ -148,7 +148,7 @@ class _LogOutPageState extends State<LogOutPage> {
                 "Go Back To Login Page",
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.blue, // Blue text color
+                  color: Colors.blue, 
                 ),
               ),
             ),
