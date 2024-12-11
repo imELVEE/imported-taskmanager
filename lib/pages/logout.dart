@@ -88,8 +88,24 @@ class _LogOutPageState extends State<LogOutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+  return Scaffold(
+    appBar: AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.home),
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        },
+      ),
+      backgroundColor: const Color.fromARGB(255, 3, 64, 113),
+      title: const Text(
+        "Planner App Logout",
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+    backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center, 
@@ -149,31 +165,6 @@ class _LogOutPageState extends State<LogOutPage> {
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.blue, 
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white, 
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero, 
-                  side: BorderSide(color: Colors.purple), 
-                ),
-                elevation: 0, // Remove shadow
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 40), 
-              ),
-              child: const Text(
-                "Go Back To Home Page",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.purple, 
                 ),
               ),
             ),

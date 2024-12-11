@@ -32,7 +32,7 @@ class HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             AppBar(
               title: const Text("Group Members:", style: TextStyle(fontSize: 40, color: Colors.black)),
               centerTitle: true,
