@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:planner_app/authentication/email.dart'; // Assuming this is the path for EmailAuth class
 import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/login.dart'; // Login page after registration
+import 'package:http/http.dart' as http;
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -13,6 +16,37 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  Future<void> registerUser() async {
+    final FirebaseAuth _fireAuth = FirebaseAuth.instance;
+    if (_fireAuth.currentUser != null) {
+      final url = Uri.parse('https://planner-appimage-823612132472.us-central1.run.app/register');
+      try {
+        final response = await http.post(
+            url,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              'email': _fireAuth.currentUser?.email,
+              'name': _fireAuth.currentUser?.displayName ?? _fireAuth.currentUser?.email,
+              'password': 'password',
+              'username' : _fireAuth.currentUser?.displayName ?? _fireAuth.currentUser?.email,
+              'userTimeZone': 4
+            })
+        );
+
+        if (response.statusCode == 200) {
+          Map<String, dynamic> jsonMap = jsonDecode(response.body);
+          print('Register5: Registered User! Responds: ${jsonMap['message']}');
+        } else {
+          print('Register5: Failed to register user. Status code: ${response.statusCode} \nResponds: ${response.body}');
+        }
+      } catch (e) {
+        print('Register5: Error: $e');
+      }
+    }
+  }
 
   // Function to handle user registration
   Future<void> _userSignUp() async {
@@ -43,6 +77,7 @@ class _RegisterState extends State<Register> {
 
     // If registration is successful, navigate to Login page
     if (info == "Registration Successful") {
+      await registerUser();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),

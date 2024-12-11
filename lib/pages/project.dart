@@ -64,7 +64,7 @@ class ProjectPageState extends State<ProjectPage> {
       body: _auth.currentUser == null
       ? const Center(
         child: Text(
-          "Please log in to view tasks.",
+          "Please log in to view projects.",
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

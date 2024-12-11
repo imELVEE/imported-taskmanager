@@ -41,4 +41,30 @@ class TaskAssignment {
       completeDate: completeDate ?? this.completeDate,
     );
   }
+
+  factory TaskAssignment.fromJson(Map<String, dynamic> json) {
+    return TaskAssignment(
+      id: json['id'] as String,
+      createDate: DateTime.parse(json['createDate'] as String),
+      subject: json['subject'] as String,
+      notes: json['notes'] as String?,
+      dueDate: json['dueDate'] != null ? DateTime.parse(json['dueDate'] as String) : null,
+      completeDate: json['completeDate'] != null ? DateTime.parse(json['completeDate'] as String) : null,
+      completed: json['completed'] as bool? ?? false,
+      parentId: json['parentId'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'createDate': createDate.toIso8601String(),
+      'subject': subject,
+      'notes': notes,
+      'dueDate': dueDate?.toIso8601String(),
+      'completeDate': completeDate?.toIso8601String(),
+      'completed': completed,
+      'parentId': parentId,
+    };
+  }
 }
