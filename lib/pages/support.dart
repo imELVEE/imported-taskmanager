@@ -64,7 +64,7 @@ class SupportPageState extends State<SupportPage> {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'Click on Account on the top right corner or double tap the screen',
+                  'Click on Login on the top right corner or double tap the screen',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
