@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:planner_app/classes/task_assignment.dart';
 import 'package:planner_app/pages/login.dart';
@@ -16,6 +17,8 @@ class TaskPage extends StatefulWidget{
 
 class TaskPageState extends State<TaskPage> {
   int _currentIndex = 0;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   List<TaskAssignment> tasks = [
     TaskAssignment(
       id: '4',
@@ -59,7 +62,18 @@ class TaskPageState extends State<TaskPage> {
 
       appBar: _topAppBar(),
 
-      body: TasksList(
+      body: _auth.currentUser == null
+      ? const Center(
+        child: Text(
+          "Please log in to view tasks.",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      )
+      : TasksList(
         tasks: topLevelTasks,
         allTasks: tasks,
         onTaskUpdate: _updateTaskInformation,
@@ -70,7 +84,9 @@ class TaskPageState extends State<TaskPage> {
         onDeleteSubtask: _deleteSubtask,
         onToggleTaskCompletion: _toggleTaskCompletion,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _auth.currentUser == null 
+      ? null
+      : FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 23, 84, 140),
         onPressed: () {
           showDialog(

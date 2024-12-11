@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:planner_app/classes/project_assignment.dart';
 import 'package:planner_app/classes/task_assignment.dart';
@@ -18,6 +19,8 @@ class ProjectPage extends StatefulWidget{
 
 class ProjectPageState extends State<ProjectPage> {
   int _currentIndex = 0;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   List<ProjectAssignment> projects = [
     ProjectAssignment(
       id: '1',
@@ -58,7 +61,18 @@ class ProjectPageState extends State<ProjectPage> {
 
       appBar: _topAppBar(),
 
-      body: ProjectsList(
+      body: _auth.currentUser == null
+      ? const Center(
+        child: Text(
+          "Please log in to view tasks.",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      )
+      : ProjectsList(
         projects: projects,
         allTasks: allTasks,
         onProjectUpdate: _updateProjectInformation,
@@ -70,7 +84,9 @@ class ProjectPageState extends State<ProjectPage> {
         onDeleteTask: _deleteTask,
         onToggleProjectCompletion: _toggleProjectCompletion,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _auth.currentUser == null
+      ? null
+      : FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 23, 84, 140),
         onPressed: () {
           showDialog(
