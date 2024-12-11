@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:726428342895:android:579d7013a972ff321ccb9a",
         "android_client_info": {
-          "package_name": "planner_app_6713f.com.planner_app"
+          "package_name": "com.example.planner_app"
         }
       },
       "oauth_client": [
@@ -17,8 +17,16 @@
           "client_id": "726428342895-hvtlkud4k3cqkqalqlkllafcpkb2k6l8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "planner_app_6713f.com.planner_app",
+            "package_name": "com.example.planner_app",
             "certificate_hash": "907ff9cc602963cca506370c8a7dad1657cc3e59"
+          }
+        },
+        {
+          "client_id": "726428342895-rhq4e28q43km4gvld362lh2q2q5f1v77.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.planner_app",
+            "certificate_hash": "14b27d174b7c1a8f568e38bc85e3501bbf4b8b77"
           }
         },
         {
@@ -50,6 +58,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "726428342895-f95b27v45jk01e5i3vrd3d8un06iq70n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "planner_app_6713f.com.planner_app",
+            "certificate_hash": "14b27d174b7c1a8f568e38bc85e3501bbf4b8b77"
+          }
+        },
+        {
+          "client_id": "726428342895-qqrjdbbblfnfuattst0jull8aoga3t4i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "planner_app_6713f.com.planner_app",
+            "certificate_hash": "907ff9cc602963cca506370c8a7dad1657cc3e59"
+          }
+        },
         {
           "client_id": "726428342895-gtv4sdek8mobp1jaljrjfckh8j5kc3dc.apps.googleusercontent.com",
           "client_type": 3
