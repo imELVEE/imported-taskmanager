@@ -31,6 +31,7 @@ class HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 30),
             AppBar(
               title: const Text("Group Members:", style: TextStyle(fontSize: 40, color: Colors.black)),
               centerTitle: true,
@@ -46,11 +47,20 @@ class HomePageState extends State<HomePage> {
               ],
             ),
             AppBar(
-              title: const Text("Description", style: TextStyle(fontSize: 40, color: Colors.black)),
+              title: const Text("Description:", style: TextStyle(fontSize: 40, color: Colors.black)),
               centerTitle: true,
               backgroundColor: Colors.white,
             ),
-            const Text("Insert description", style: TextStyle(fontSize: 20, color: Colors.black)),
+            const Padding(
+            padding: EdgeInsets.all(12.0), 
+            child: Center(
+              child:Text(
+                "This planner app helps you organize your daily task and school work",
+                style: TextStyle(fontSize: 20, color: Colors.black),
+                textAlign: TextAlign.center, 
+              ),
+            ),
+          ),
             AppBar(
               title: const Text("Code URL:", style: TextStyle(fontSize: 40, color: Colors.black)),
               centerTitle: true,
@@ -67,15 +77,16 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
             // Display current user info
             if (_currentUser != null) ...[
               Text(
                 'Username: ${_currentUser!.displayName ?? "No Username"}',
-                style: TextStyle(fontSize: 20, color: Colors.black),
+                style: const TextStyle(fontSize: 20, color: Colors.black),
               ),
               Text(
                 'Email:${_currentUser!.email ?? "No Email"}',
-                style: TextStyle(fontSize: 20, color: Colors.black),
+                style: const TextStyle(fontSize: 20, color: Colors.black),
               ),
             ],
           ],
@@ -158,3 +169,5 @@ class HomePageState extends State<HomePage> {
     );
   }
 }
+
+
