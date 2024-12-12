@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:planner_app/pages/Reminder.dart';
 import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/login.dart';
+import 'package:planner_app/pages/logout.dart';
 import 'package:planner_app/pages/project.dart';
 import 'package:planner_app/pages/task.dart';
 
@@ -14,7 +16,11 @@ class SupportPage extends StatefulWidget {
 
 class SupportPageState extends State<SupportPage> {
   int _currentIndex = 0;
-
+  User? _currentUser;
+   void initState() {
+    super.initState();
+    _currentUser = FirebaseAuth.instance.currentUser;
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -58,7 +64,7 @@ class SupportPageState extends State<SupportPage> {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'Click on Account on the top right corner or double tap the screen',
+                  'Click on Login on the top right corner or double tap the screen',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -68,7 +74,7 @@ class SupportPageState extends State<SupportPage> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Didn't recieve Password reset email?",
+                  "Didn't receive Password reset email?",
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -123,9 +129,14 @@ class SupportPageState extends State<SupportPage> {
       ),
       backgroundColor: const Color.fromARGB(255, 3, 64, 113),
       title: const Text('Planner App Support'),
-      actions: [
-        TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
-      ],
+    actions: <Widget>[
+        if (_currentUser != null) ...[
+        TextButton(onPressed: _logOutPageRoute, child: const Text('LOGOUT')),
+      ]
+      else  ...[
+          TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
+        ]
+    ],
     );
   }
 
@@ -191,5 +202,11 @@ class SupportPageState extends State<SupportPage> {
 
   void _homePageRoute() {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+  }
+    void _logOutPageRoute() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LogOutPage()),
+    );
   }
 }

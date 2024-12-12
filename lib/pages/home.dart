@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:planner_app/pages/login.dart';
+import 'package:planner_app/pages/logout.dart';
 import 'package:planner_app/pages/support.dart';
 import 'package:planner_app/pages/task.dart';
 import 'package:planner_app/pages/project.dart';
@@ -31,7 +32,7 @@ class HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             AppBar(
               title: const Text("Group Members:", style: TextStyle(fontSize: 40, color: Colors.black)),
               centerTitle: true,
@@ -80,10 +81,16 @@ class HomePageState extends State<HomePage> {
             const SizedBox(height: 20),
             // Display current user info
             if (_currentUser != null) ...[
+              const Text(
+                'You have successfully logged in',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              const SizedBox(height: 2),
               Text(
-                'Username: ${_currentUser!.displayName ?? "No Username"}',
+                'Username: ${_currentUser!.displayName ?? _currentUser!.email?.split('@').first ?? "No Username"}',
                 style: const TextStyle(fontSize: 20, color: Colors.black),
               ),
+              const SizedBox(height: 2),
               Text(
                 'Email:${_currentUser!.email ?? "No Email"}',
                 style: const TextStyle(fontSize: 20, color: Colors.black),
@@ -101,10 +108,15 @@ class HomePageState extends State<HomePage> {
       backgroundColor: const Color.fromARGB(255, 3, 64, 113),
       title: const Text('Planner App Home'),
       actions: <Widget>[
-        TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
-      ],
-    );
-  }
+        if (_currentUser != null) ...[
+        TextButton(onPressed: _logOutPageRoute, child: const Text('LOGOUT')),
+      ]
+      else  ...[
+          TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
+        ]
+    ],
+  );
+}
 
   Widget _bottomNavBar() {
     return BottomNavigationBar(
@@ -166,6 +178,12 @@ class HomePageState extends State<HomePage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const ProjectPage()),
+    );
+  }
+    void _logOutPageRoute() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LogOutPage()),
     );
   }
 }

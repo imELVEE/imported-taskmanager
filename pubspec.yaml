@@ -44,7 +44,7 @@ dependencies:
   uuid: ^4.5.1
   convert: ^3.1.2
   url_launcher: ^6.3.1
-  twitter_login: ^4.4.2
+  # twitter_login: ^4.4.2
 
 dev_dependencies:
   flutter_test:
