@@ -1,31 +1,31 @@
-Planner App
+# Planner App#
 
-Overview
-Our application is meant to serve as a manager for your daily life task,homework assignments,and projects. It helps you organize your task and adding due date to it as a reminder.
+## Overview
+Our application is meant to serve as a manager for your daily life task,homework assignment,and projects. It helps you organize your task and adding due date to it as a reminder.
 
-Application Functions
+## Application Functions##
 This andriod app allows you to sign in using google login or register an account using email and password. You will be able to reset your password if you forgot your password. We have a task and project page which allows you to add task and project and put them on seperate pages. Our app also have a support page including the contanct information and solution to requently asked question.
-Dependencies
+## Dependencies
 
-  cupertino_icons: ^1.0.8
-  firebase_auth: ^5.3.1
-  firebase_core: ^3.6.0
-  google_sign_in: ^6.2.1
-  sign_in_button: ^3.2.0
-  google_fonts: ^6.2.1
-  date_time_format: ^2.0.1
-  uuid: ^4.5.1
-  convert: ^3.1.2
-  url_launcher: ^6.3.1
+  - cupertino_icons: ^1.0.8
+  - firebase_auth: ^5.3.1
+  - firebase_core: ^3.6.0
+  - google_sign_in: ^6.2.1
+  - sign_in_button: ^3.2.0
+  - google_fonts: ^6.2.1
+  - date_time_format: ^2.0.1
+  - uuid: ^4.5.1
+  - convert: ^3.1.2
+  - url_launcher: ^6.3.1
 
 
-Contributions
+## Contributions
 
-GROUP 5
-Alvi Aziz - 
-Usman Sheikh -
-Nathan Vazquez - 
-XiaoMin Chen - 
+- GROUP 6
+- Alvi Aziz - 
+- Usman Sheikh -
+- Nathan Vazquez - 
+- XiaoMin Chen - 
 
 This Project has some history that was not full imported from a previous repository (as we did not have access to this offical one).
 
