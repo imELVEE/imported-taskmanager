@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:planner_app/authentication/email.dart';
 import 'package:planner_app/authentication/google.dart';
@@ -5,7 +6,7 @@ import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/logout.dart';
 import 'package:planner_app/pages/register.dart';
 import 'package:sign_in_button/sign_in_button.dart';
-import 'package:twitter_login/twitter_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,14 +17,37 @@ class LoginPage extends StatefulWidget {
 
 
 
+
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GoogleAuth _googleAuth = GoogleAuth();
+  Map<String, dynamic>? _userData;
 
-void _twitterSignIn() async {
-  final twitterLogin = TwitterLogin(apiKey: "GWQKrUpGWf9vVhUm9JbtCLD3M", apiSecretKey: 'Z74WIDg4AdUet4C|KkhaVspujyCYHhiARQelZvZG8ofQy4JG3i', redirectURI: "://");
+
+
+Future<UserCredential> signInWithFacebook() async {
+  final LoginResult loginResult = await FacebookAuth.instance.login(permissions: ['email']);
+  if(loginResult == LoginStatus.success){
+    final userData = await FacebookAuth.instance.getUserData();
+    _userData = userData;
+   
+  } else{
+    print(loginResult.message);
+  }
+
+
+
+  final OAuthCredential FacebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
+   Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  return FirebaseAuth.instance.signInWithCredential(FacebookAuthCredential);
 }
+
+
+
 
 void _googleSignIn() async {
   final user = await _googleAuth.googleSignIn();
@@ -274,13 +298,10 @@ Widget build(BuildContext context) {
               Transform.scale(
                 scale: 1.2,
                 child: SignInButton(
-                  Buttons.twitter,
-                  text: "Sign In Using Twitter",
+                  Buttons.facebook,
+                  text: "Sign In Using Facebook",
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                    );
+                    signInWithFacebook();
                   },
                 ),
               ),
