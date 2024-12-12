@@ -5,6 +5,7 @@ import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/logout.dart';
 import 'package:planner_app/pages/register.dart';
 import 'package:sign_in_button/sign_in_button.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,10 +14,16 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+
+
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GoogleAuth _googleAuth = GoogleAuth();
+
+void _twitterSignIn() async {
+  final twitterLogin = TwitterLogin(apiKey: "GWQKrUpGWf9vVhUm9JbtCLD3M", apiSecretKey: 'Z74WIDg4AdUet4C|KkhaVspujyCYHhiARQelZvZG8ofQy4JG3i', redirectURI: "://");
+}
 
 void _googleSignIn() async {
   final user = await _googleAuth.googleSignIn();
