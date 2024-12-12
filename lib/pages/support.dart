@@ -74,7 +74,7 @@ class SupportPageState extends State<SupportPage> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Didn't recieve Password reset email?",
+                  "Didn't receive Password reset email?",
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
