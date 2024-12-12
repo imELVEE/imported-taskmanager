@@ -66,12 +66,13 @@ class ProjectWidget extends StatelessWidget {
               onTap: _navigateToDetails,
               tileColor: Colors.white,
               leading: Checkbox(
-                fillColor: WidgetStatePropertyAll(Colors.white),
+                fillColor: const WidgetStatePropertyAll(Colors.white),
                 side: WidgetStateBorderSide.resolveWith((states) {
-                  if (states.contains(WidgetState.selected))
+                  if (states.contains(WidgetState.selected)) {
                     return const BorderSide(color: Colors.black);
-                  else
+                  } else {
                     return const BorderSide(color: Colors.blue);
+                  }
                 }
                 ),
                 checkColor: Colors.black,

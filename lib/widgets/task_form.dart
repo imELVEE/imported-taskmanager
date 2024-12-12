@@ -2,7 +2,6 @@ import 'package:planner_app/classes/task_assignment.dart';
 import 'package:flutter/material.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:uuid/uuid.dart';
-import 'dart:convert';
 
 class TaskForm extends StatefulWidget {
   final TaskAssignment? task;
@@ -166,7 +165,7 @@ class TaskFormState extends State<TaskForm> {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
               final newTask = TaskAssignment(
-                id: widget.task?.id ?? Uuid().v4(),
+                id: widget.task?.id ?? const Uuid().v4(),
                 subject: _subject,
                 notes: _notes,
                 completed: _completed,

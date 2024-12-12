@@ -53,7 +53,7 @@ class TaskPageState extends State<TaskPage> {
       }).toList();
     }
     catch (e) {
-      print('Task5: Error parsing JSON: $e');
+      //print('Task5: Error parsing JSON: $e');
       return [];
     }
   }
@@ -66,7 +66,7 @@ class TaskPageState extends State<TaskPage> {
       });
     } catch (e) {
       // Handle errors if needed
-      print('Task55: Error fetching tasks: $e');
+      //print('Task55: Error fetching tasks: $e');
     }
   }
 
@@ -189,7 +189,7 @@ class TaskPageState extends State<TaskPage> {
             },
           );
         }, // Open form to add new task
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
 
       bottomNavigationBar: _bottomNavBar(),
@@ -198,7 +198,7 @@ class TaskPageState extends State<TaskPage> {
 
   // Add new task to the list
   TaskAssignment _addTask(TaskAssignment newTask){
-    print('Task5: new task due date: ${newTask.dueDate} of type ${newTask.dueDate.runtimeType}');
+    //print('Task5: new task due date: ${newTask.dueDate} of type ${newTask.dueDate.runtimeType}');
     addTaskToDB(newTask);
     return newTask;
   }
@@ -218,7 +218,7 @@ class TaskPageState extends State<TaskPage> {
         setState(() {});
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Task5: ${response.body}');
+          //print('Task5: ${response.body}');
         } else {
           throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
         }
@@ -265,7 +265,7 @@ class TaskPageState extends State<TaskPage> {
         setState(() {});
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Task5: ${response.body}');
+          //print('Task5: ${response.body}');
         } else {
           throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
         }
@@ -295,9 +295,9 @@ class TaskPageState extends State<TaskPage> {
           }),
         );
 
-        print('Task5: task id was: ${taskToDelete.id}');
+        //print('Task5: task id was: ${taskToDelete.id}');
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Task5: ${response.body}');
+          //print('Task5: ${response.body}');
         } else {
           throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
         }

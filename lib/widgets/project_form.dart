@@ -165,7 +165,7 @@ class ProjectFormState extends State<ProjectForm> {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
               final newProject = ProjectAssignment(
-                id: widget.project?.id ?? Uuid().v4(),
+                id: widget.project?.id ?? const Uuid().v4(),
                 subject: _subject,
                 notes: _notes,
                 completed: _completed,

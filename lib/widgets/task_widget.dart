@@ -65,10 +65,11 @@ class TaskWidget extends StatelessWidget {
               leading: Checkbox(
                 fillColor: const WidgetStatePropertyAll(Colors.white),
                 side: WidgetStateBorderSide.resolveWith((states) {
-                  if (states.contains(WidgetState.selected))
+                  if (states.contains(WidgetState.selected)) {
                     return const BorderSide(color: Colors.black);
-                  else
+                  } else {
                     return const BorderSide(color: Colors.blue);
+                  }
                 }
                 ),
                 checkColor: Colors.black,
@@ -126,7 +127,7 @@ class TaskWidget extends StatelessWidget {
                     Expanded(
                         child: Text(
                             formattedDueDate,
-                            style: TextStyle(color: Colors.white)
+                            style: const TextStyle(color: Colors.white)
                         )
                     ),
                   ],
@@ -148,11 +149,12 @@ class TaskWidget extends StatelessWidget {
       leading: Checkbox(
         fillColor: const WidgetStatePropertyAll(Colors.white),
         side: WidgetStateBorderSide.resolveWith((states) {
-            if (states.contains(WidgetState.selected))
-              return const BorderSide(color: Colors.black);
-            else
-              return const BorderSide(color: Colors.blue);
+            if (states.contains(WidgetState.selected)) {
+            return const BorderSide(color: Colors.black);
+          } else {
+            return const BorderSide(color: Colors.blue);
           }
+        }
         ),
         checkColor: Colors.black,
         value: subtask.completed,
@@ -167,7 +169,7 @@ class TaskWidget extends StatelessWidget {
       ),
       subtitle: Text(
           (subtaskDueText + '\nid: ' + subtask.id.toString()),
-        style: TextStyle(color: Colors.black, fontSize: 15)
+        style: const TextStyle(color: Colors.black, fontSize: 15)
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

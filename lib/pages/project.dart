@@ -110,7 +110,7 @@ class ProjectPageState extends State<ProjectPage> {
         );
 
         if (response.statusCode == 200) {
-          print('TASKS RSP1: ${response.body}');
+          //print('TASKS RSP1: ${response.body}');
           return parseTasksFromJson(response.body);
         } else {
           throw Exception('Failed to fetch tasks. Status code: ${response.statusCode}');
@@ -198,10 +198,6 @@ class ProjectPageState extends State<ProjectPage> {
             final projects = snapshot.data!['projects'] as List<ProjectAssignment>;
             final allTasks = snapshot.data!['tasks'] as List<TaskAssignment>;
 
-            for (var task in allTasks) {
-              print('Parent ID: ${task.parentId}');
-            }
-
             if (projects.isEmpty) {
               return const Center(
                 child: Text(
@@ -279,7 +275,7 @@ class ProjectPageState extends State<ProjectPage> {
         setState(() {});
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Project5: ${response.body}');
+          //print('Project5: ${response.body}');
         } else {
           throw Exception('Project5: Failed to fetch projects. Status code: ${response.statusCode}');
         }
@@ -331,7 +327,7 @@ class ProjectPageState extends State<ProjectPage> {
         setState(() {});
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Project5: ${response.body}');
+          //print('Project5: ${response.body}');
         } else {
           throw Exception('Project5: Failed to fetch projects. Status code: ${response.statusCode}');
         }
@@ -361,9 +357,9 @@ class ProjectPageState extends State<ProjectPage> {
           }),
         );
 
-        print('Project5: project id was: ${projectToDelete.id}');
+        //print('Project5: project id was: ${projectToDelete.id}');
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Project5: ${response.body}');
+          //print('Project5: ${response.body}');
         } else {
           throw Exception('Project5: Failed to fetch projects. Status code: ${response.statusCode}');
         }
@@ -424,7 +420,7 @@ class ProjectPageState extends State<ProjectPage> {
         setState(() {});
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Task5: ${response.body}');
+          //print('Task5: ${response.body}');
         } else {
           throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
         }
@@ -474,7 +470,7 @@ class ProjectPageState extends State<ProjectPage> {
         setState(() {});
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Task5: ${response.body}');
+          //print('Task5: ${response.body}');
         } else {
           throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
         }
@@ -558,9 +554,9 @@ class ProjectPageState extends State<ProjectPage> {
           }),
         );
 
-        print('Task5: task id was: ${taskToDelete.id}');
+        //print('Task5: task id was: ${taskToDelete.id}');
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print('Task5: ${response.body}');
+          //print('Task5: ${response.body}');
         } else {
           throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
         }

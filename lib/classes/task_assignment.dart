@@ -44,7 +44,7 @@ class TaskAssignment {
   }
 
   factory TaskAssignment.fromTaskJson(Map<String, dynamic> json) {
-    print('TASKSJSON: ${json['tasks']}');
+    //print('TASKSJSON: ${json['tasks']}');
     return TaskAssignment(
       id: json['assignment_id'] as String,
       createDate: DateTime.parse(json['create_date'] as String),
@@ -53,7 +53,7 @@ class TaskAssignment {
       dueDate: json['due_date'] != null ? DateTime.parse(json['due_date'] as String) : null,
       completeDate: json['tasks']['completed_date'] != null ? DateTime.parse(json['tasks']['completed_date'] as String) : null,
       completed: json['tasks']['completed'] as bool? ?? false,
-      parentId: json['parentId'] as String?,
+      parentId: json['tasks']['parent_project'] as String?,
     );
   }
 
@@ -70,7 +70,7 @@ class TaskAssignment {
   }
 
   factory TaskAssignment.fromProjectJson(Map<String, dynamic> json) {
-    print('TASKSJSON: ${json['tasks']}');
+    //print('TASKSJSON: ${json['tasks']}');
     return TaskAssignment(
       id: json['assignment_id'] as String,
       createDate: DateTime.parse(json['create_date'] as String),
