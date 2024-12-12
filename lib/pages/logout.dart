@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:planner_app/authentication/email.dart';
 import 'package:planner_app/pages/home.dart';
@@ -16,6 +17,40 @@ class LogOutPage extends StatefulWidget {
 class _LogOutPageState extends State<LogOutPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<void> _facebookSignOut() async {
+    try {
+      // Check if the user is signed in with email
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // User is signed in, proceed with sign-out
+        await FacebookAuth.instance.logOut();
+        await _auth.signOut();
+        // Show Snackbar message successful sign-out
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar( 
+            content: Text("You have signed out of your Facebook account."),
+            backgroundColor:  Color.fromARGB(119, 144, 196, 255),
+          ),
+        );
+        // Navigate back to LoginPage after sign-out
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()), 
+        );
+      } else {
+        // If no user is logged in, show an error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content:Text("You are not logged in using facebook."),
+            backgroundColor:  Color.fromARGB(119, 144, 196, 255),
+          ),
+        );
+      }
+    } catch (e) {
+      print("Error during email sign-out: $e");
+    }
+  }
 
   // Handle Email Sign-Out
   Future<void> _emailSignOut() async {
@@ -136,9 +171,11 @@ class _LogOutPageState extends State<LogOutPage> {
             Transform.scale(
               scale: 1.2,
               child: SignInButton(
-                Buttons.twitter,
-                text: "Twitter Sign Out",
-                onPressed:(){} 
+                Buttons.facebook,
+                text: "Facebook Sign Out",
+                onPressed:(){
+                  _facebookSignOut();
+                } 
               ),
             ),
             const SizedBox(height: 15),

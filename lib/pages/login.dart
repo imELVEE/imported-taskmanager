@@ -6,8 +6,10 @@ import 'package:planner_app/pages/home.dart';
 import 'package:planner_app/pages/logout.dart';
 import 'package:planner_app/pages/register.dart';
 import 'package:sign_in_button/sign_in_button.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,10 +18,39 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+
+
+
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GoogleAuth _googleAuth = GoogleAuth();
+  Map<String, dynamic>? _userData;
+
+
+
+Future<UserCredential> signInWithFacebook() async {
+  final LoginResult loginResult = await FacebookAuth.instance.login(permissions: ['email']);
+  if(loginResult == LoginStatus.success){
+    final userData = await FacebookAuth.instance.getUserData();
+    _userData = userData;
+   
+  } else{
+    print(loginResult.message);
+  }
+
+
+
+  final OAuthCredential FacebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
+   Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  return FirebaseAuth.instance.signInWithCredential(FacebookAuthCredential);
+}
+
+
+
 
 
   Future<void> registerUser() async {
@@ -304,13 +335,10 @@ Widget build(BuildContext context) {
               Transform.scale(
                 scale: 1.2,
                 child: SignInButton(
-                  Buttons.twitter,
-                  text: "Sign In Using Twitter",
+                  Buttons.facebook,
+                  text: "Sign In Using Facebook",
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                    );
+                    signInWithFacebook();
                   },
                 ),
               ),
