@@ -90,10 +90,10 @@ class TaskPageState extends State<TaskPage> {
         if (response.statusCode == 200) {
           return parseTasksFromJson(response.body);
         } else {
-          throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
+          throw Exception('Task55: Failed to fetch tasks. Status code: ${response.statusCode}');
         }
       } catch (e) {
-        throw Exception('Task5: Error fetching tasks: $e');
+        throw Exception('Task55: Error fetching tasks: $e');
       }
     } else {
       return [];
@@ -198,6 +198,7 @@ class TaskPageState extends State<TaskPage> {
 
   // Add new task to the list
   TaskAssignment _addTask(TaskAssignment newTask){
+    print('Task5: new task due date: ${newTask.dueDate} of type ${newTask.dueDate.runtimeType}');
     addTaskToDB(newTask);
     return newTask;
   }

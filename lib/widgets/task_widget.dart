@@ -116,27 +116,23 @@ class TaskWidget extends StatelessWidget {
                 )
               ]),
             ),
-            ExpansionTile(
-              backgroundColor: Colors.white70,
-              textColor: Colors.black,
-              iconColor: Colors.black,
-              collapsedBackgroundColor: Colors.black,
-              collapsedTextColor: Colors.white,
-              collapsedIconColor: Colors.white,
-              title: Text(
-                  (formattedDueDate + ' | id: ' + task.id.toString()),
-              ),
-              children: [
-                for (final subtask in subtasks) _buildSubtaskRow(context, subtask),
-
-                // Add a plus icon for adding a new subtask
-                ListTile(
-                  leading: Icon(Icons.add, color: Theme.of(context).primaryColor),
-                  title: Text('Add a new subtask', style: TextStyle(color: Theme.of(context).primaryColor)),
-                  onTap: () => onAddSubtask(task), // Pass the parent task
+            Container(
+              color: Colors.black,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: <Widget>[
+                    const SizedBox(width: 8),
+                    Expanded(
+                        child: Text(
+                            formattedDueDate,
+                            style: TextStyle(color: Colors.white)
+                        )
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            )
           ],
         ),
       ),

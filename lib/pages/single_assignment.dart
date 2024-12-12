@@ -74,19 +74,13 @@ class DetailPageState extends State<DetailPage> {
           }
         });
       }
-      else {
-        TaskAssignment subtask = await widget.onAddSubtask?.call(widget.assignment);
-        setState(() {
-          if (subtask != null) {
-            widget.subTasks.add(subtask);
-          }
-        });
-      }
     }
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
+      child: isTask()
+      ? _buildHeader(context)
+      : Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context),
