@@ -87,8 +87,24 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+      return Scaffold(
+    appBar: AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.home),
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        },
+      ),
+      backgroundColor: const Color.fromARGB(255, 3, 64, 113),
+      title: const Text(
+        "Planner App Register",
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+    backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
           // Close keyboard when clicking on blank area
@@ -100,7 +116,7 @@ class _RegisterState extends State<Register> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 100),
+                const SizedBox(height: 30),
                 Image.asset(
                   'lib/assets/plannerlogo.jpg',
                   width: 100,

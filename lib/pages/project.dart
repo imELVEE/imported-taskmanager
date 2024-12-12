@@ -4,6 +4,7 @@ import 'package:planner_app/classes/project_assignment.dart';
 import 'package:planner_app/classes/task_assignment.dart';
 import 'package:planner_app/pages/login.dart';
 import 'package:planner_app/pages/home.dart';
+import 'package:planner_app/pages/logout.dart';
 import 'package:planner_app/pages/support.dart';
 import 'package:planner_app/pages/task.dart';
 import 'package:planner_app/widgets/project_form.dart';
@@ -585,9 +586,14 @@ class ProjectPageState extends State<ProjectPage> {
       ),
       backgroundColor: const Color.fromARGB(255, 3, 64, 113),
       title: const Text('Planner App Projects'),
-      actions: <Widget>[
-        TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
-      ],
+       actions: <Widget>[
+        if (_currentUser != null) ...[
+        TextButton(onPressed: _logOutPageRoute, child: const Text('LOGOUT')),
+      ]
+      else  ...[
+          TextButton(onPressed: _loginPageRoute, child: const Text('LOGIN')),
+        ]
+    ],
     );
   }
 
@@ -656,6 +662,12 @@ class ProjectPageState extends State<ProjectPage> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const TaskPage())
+    );
+  }
+  void _logOutPageRoute() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LogOutPage()),
     );
   }
 }
