@@ -7,6 +7,9 @@ import 'package:planner_app/pages/logout.dart';
 import 'package:planner_app/pages/register.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -49,9 +52,42 @@ Future<UserCredential> signInWithFacebook() async {
 
 
 
+
+  Future<void> registerUser() async {
+    final FirebaseAuth _fireAuth = FirebaseAuth.instance;
+    if (_fireAuth.currentUser != null) {
+      final url = Uri.parse('https://planner-appimage-823612132472.us-central1.run.app/register');
+      try {
+        final response = await http.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
+            'email': _fireAuth.currentUser?.email,
+            'name': _fireAuth.currentUser?.displayName ?? _fireAuth.currentUser?.email,
+            'password': 'password',
+            'username' : _fireAuth.currentUser?.displayName ?? _fireAuth.currentUser?.email,
+            'userTimeZone': 4
+          })
+        );
+
+        if (response.statusCode == 200) {
+          Map<String, dynamic> jsonMap = jsonDecode(response.body);
+          print('Register5: Registered User! Responds: ${jsonMap['message']}');
+        } else {
+          print('Register5: Failed to register user. Status code: ${response.statusCode} \nResponds: ${response.body}');
+        }
+      } catch (e) {
+        print('Register5: Error: $e');
+      }
+    }
+  }
+
 void _googleSignIn() async {
   final user = await _googleAuth.googleSignIn();
   if (user != null) {
+    await registerUser();
     // Show success message
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -107,6 +143,7 @@ void _googleSignIn() async {
 
   // Only navigate if sign-in was successful
   if (info == "Login Successfully") {
+    await registerUser();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const HomePage()),

@@ -1,4 +1,6 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 class TaskAssignment {
   String id;
   DateTime createDate;
@@ -40,5 +42,57 @@ class TaskAssignment {
       completed: completed ?? this.completed,
       completeDate: completeDate ?? this.completeDate,
     );
+  }
+
+  factory TaskAssignment.fromTaskJson(Map<String, dynamic> json) {
+    return TaskAssignment(
+      id: json['assignment_id'] as String,
+      createDate: DateTime.parse(json['create_date'] as String),
+      subject: json['subject'] as String,
+      notes: json['notes'] as String?,
+      dueDate: json['due_date'] != null ? DateTime.parse(json['due_date'] as String) : null,
+      completeDate: json['completed_date'] != null ? DateTime.parse(json['completed_date'] as String) : null,
+      completed: json['completed'] as bool? ?? false,
+      parentId: json['parentId'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toTaskJson() {
+    return {
+      'email': FirebaseAuth.instance.currentUser?.email,
+      'create_date': createDate.toIso8601String(),
+      'subject': subject,
+      'notes': notes,
+      'due_date': dueDate?.toIso8601String(),
+      'completed_date': completeDate?.toIso8601String(),
+      'completed': completed,
+      'parent_task': parentId,
+    };
+  }
+
+  factory TaskAssignment.fromProjectJson(Map<String, dynamic> json) {
+    return TaskAssignment(
+      id: json['assignment_id'] as String,
+      createDate: DateTime.parse(json['create_date'] as String),
+      subject: json['subject'] as String,
+      notes: json['notes'] as String?,
+      dueDate: json['due_date'] != null ? DateTime.parse(json['due_date'] as String) : null,
+      completeDate: json['completed_date'] != null ? DateTime.parse(json['completed_date'] as String) : null,
+      completed: json['completed'] as bool? ?? false,
+      parentId: json['parent_project'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toProjectJson() {
+    return {
+      'email': FirebaseAuth.instance.currentUser?.email,
+      'create_date': createDate.toIso8601String(),
+      'subject': subject,
+      'notes': notes,
+      'due_date': dueDate?.toIso8601String(),
+      'completed_date': completeDate?.toIso8601String(),
+      'completed': completed,
+      'parent_project': parentId,
+    };
   }
 }
