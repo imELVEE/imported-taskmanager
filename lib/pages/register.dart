@@ -48,42 +48,41 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  // Function to handle user registration
-  Future<void> _userSignUp() async {
-    String info = await EmailAuth().userRegister(
-      email: emailController.text,
-      password: passwordController.text,
-    );
-    // Display a SnackBar with the result
-    if (emailController.text.isNotEmpty || passwordController.text.isNotEmpty ) {
+Future<void> _userSignUp() async {
+  if (emailController.text.isEmpty || passwordController.text.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(info),
-        backgroundColor:  const Color.fromARGB(119, 144, 196, 255),
-        ),
-    );
-    }
-    else{
-      ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text("Please enter Your email and Password"),
-        backgroundColor:Color.fromARGB(119, 144, 196, 255),),
+        content: Text("Please enter your email and password"),
+        backgroundColor: Color.fromARGB(119, 144, 196, 255),
+      ),
     );
-    }
+    return;
+  }
 
-    // Clear the text fields after registration
+  String info = await EmailAuth().userRegister(
+    email: emailController.text,
+    password: passwordController.text,
+  );
+
+  // Display a SnackBar with the result
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(info),
+      backgroundColor: const Color.fromARGB(119, 144, 196, 255),
+    ),
+  );
+
+  // If registration is successful
+  if (info == "Registration Successful") {
+    await registerUser(); // Save user data to the database
     emailController.clear();
     passwordController.clear();
-
-    // If registration is successful, navigate to Login page
-    if (info == "Registration Successful") {
-      await registerUser();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
