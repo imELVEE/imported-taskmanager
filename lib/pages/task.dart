@@ -404,7 +404,7 @@ class TaskPageState extends State<TaskPage> {
       backgroundColor: const Color.fromARGB(255, 3, 64, 113),
       title: const Text('Planner App Tasks'),
      actions: <Widget>[
-        if (_currentUser != null) ...[
+        if (_auth.currentUser != null) ...[
         TextButton(onPressed: _logOutPageRoute, child: const Text('LOGOUT')),
       ]
       else  ...[
