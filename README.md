@@ -1,4 +1,4 @@
-# Planner App#
+# Planner App
 
 ## Overview
 Our application is meant to serve as a manager for your daily life task,homework assignment,and projects. It helps you organize your task and adding due date to it as a reminder.
