@@ -21,7 +21,6 @@ class ProjectFormState extends State<ProjectForm> {
   String? _notes;
   DateTime? _dueDate;
 
-  DateTime? _completeDate;
   late bool _completed = false;
 
   Future<void> _selectDateTime(BuildContext context, DateTime? currentDate, Function(DateTime) onDatePicked) async {
@@ -61,7 +60,6 @@ class ProjectFormState extends State<ProjectForm> {
       _dueDate = widget.project!.dueDate;
       _notes = widget.project!.notes;
       _completed = widget.project!.completed;
-      _completeDate = widget.project!.completeDate;
     }
     else {
       _createDate = DateTime.now();
@@ -126,35 +124,9 @@ class ProjectFormState extends State<ProjectForm> {
                 onChanged: (value) {
                   setState(() {
                     _completed = value!;
-                    if (!_completed) {
-                      _completeDate = null;
-                    }
                   });
                 },
               ),
-              if (_completed)
-                GestureDetector(
-                  onTap: () {
-                    _selectDateTime(context, _completeDate, (pickedDate) {
-                      setState(() {
-                        _completeDate = pickedDate;
-                      });
-                    });
-                  },
-                  child: AbsorbPointer(  // Prevents manual text input
-                    child: TextField(
-                      controller: TextEditingController(
-                        text: _completeDate != null
-                          ? _completeDate!.format(DateTimeFormats.american)
-                          : 'Select completion date',  // Default text
-                      ),
-                      decoration: const InputDecoration(
-                        labelText: 'Completion Date',
-                        hintText: 'Tap to select a date',
-                      ),
-                    ),
-                  ),
-                ),
               GestureDetector(
                 onTap: () {
                   _selectDateTime(context, _dueDate, (pickedDate) {

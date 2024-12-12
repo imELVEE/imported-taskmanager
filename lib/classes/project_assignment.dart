@@ -28,19 +28,17 @@ class ProjectAssignment {
       subject: json['subject'] as String,
       notes: json['notes'] as String?,
       dueDate: json['due_date'] != null ? DateTime.parse(json['due_date'] as String) : null,
-      completeDate: json['completed_date'] != null ? DateTime.parse(json['completed_date'] as String) : null,
-      completed: json['completed'] as bool? ?? false,
+      completeDate: json['projects']['completed_date'] != null ? DateTime.parse(json['projects']['completed_date'] as String) : null,
+      completed: json['projects']['completed'] as bool? ?? false,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'email': FirebaseAuth.instance.currentUser?.email,
-      'create_date': createDate.toIso8601String(),
       'subject': subject,
       'notes': notes,
       'due_date': dueDate?.toIso8601String(),
-      'completed_date': completeDate?.toIso8601String(),
       'completed': completed,
     };
   }

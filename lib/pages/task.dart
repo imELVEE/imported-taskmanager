@@ -46,9 +46,9 @@ class TaskPageState extends State<TaskPage> {
           dueDate: map['due_date'] != null ? DateTime.tryParse(map['due_date']) : null,
           subject: map['subject'] ?? 'No Subject',
           notes: map['notes'] ?? '',
-          completed: map['completed'] ?? false, // Defaulting as there's no "completed" field
-          completeDate: map['completed_date'], // Defaulting as there's no "complete_date" field
-          parentId: null, // Defaulting as there's no "parentId" field
+          completed: map['tasks'] != null ? map['tasks']['completed'] : false,
+          completeDate: map['tasks'] != null ? map['tasks']['completed_date'] : null,
+          parentId: map['tasks'] != null ? map['tasks']['parent_project'] : null,
         );
       }).toList();
     }
@@ -312,7 +312,7 @@ class TaskPageState extends State<TaskPage> {
     task.completeDate = value ?? false ? DateTime.now() : null;
     await updateTaskInDB(task);
     setState(() {
-      _setSubtasksCompletion(task.id, value ?? false);
+      //_setSubtasksCompletion(task.id, value ?? false);
     });
   }
 

@@ -110,6 +110,7 @@ class ProjectPageState extends State<ProjectPage> {
         );
 
         if (response.statusCode == 200) {
+          print('TASKS RSP1: ${response.body}');
           return parseTasksFromJson(response.body);
         } else {
           throw Exception('Failed to fetch tasks. Status code: ${response.statusCode}');
@@ -136,8 +137,8 @@ class ProjectPageState extends State<ProjectPage> {
         dueDate: map['due_date'] != null ? DateTime.tryParse(map['due_date']) : null,
         subject: map['subject'] ?? 'No Subject',
         notes: map['notes'] ?? '',
-        completed: map['completed'] ?? false,
-        completeDate: map['completed_date'],
+        completed: map['projects'] != null ? map['projects']['completed'] : false,
+        completeDate: map['projects'] != null ? map['projects']['completed_date'] : null,
       );
     }).toList();
   }
@@ -150,16 +151,15 @@ class ProjectPageState extends State<ProjectPage> {
 
     return jsonData.map((item) {
       final map = item as Map<String, dynamic>;
-      print('parent project: ${map['parent_project']}');
       return TaskAssignment(
         id: map['assignment_id'] ?? '',
         createDate: DateTime.tryParse(map['create_date'] ?? '') ?? DateTime.now(),
         dueDate: map['due_date'] != null ? DateTime.tryParse(map['due_date']) : null,
         subject: map['subject'] ?? 'No Subject',
         notes: map['notes'] ?? '',
-        completed: map['completed'] ?? false,
-        completeDate: map['completed_date'],
-        parentId: map['parent_project'],
+        completed: map['tasks'] != null ? map['tasks']['completed'] : false,
+        completeDate: map['tasks'] != null ? map['tasks']['completed_date'] : null,
+        parentId: map['tasks'] != null ? map['tasks']['parent_project'] : null,
       );
     }).toList();
   }
