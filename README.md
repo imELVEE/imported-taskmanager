@@ -3,7 +3,7 @@
 ## Overview
 Our application is meant to serve as a manager for your daily life task,homework assignment,and projects. It helps you organize your task and adding due date to it as a reminder.
 
-## Application Functions##
+## Application Functions
 This andriod app allows you to sign in using google login or register an account using email and password. You will be able to reset your password if you forgot your password. We have a task and project page which allows you to add task and project and put them on seperate pages. Our app also have a support page including the contanct information and solution to requently asked question.
 ## Dependencies
 
@@ -21,7 +21,7 @@ This andriod app allows you to sign in using google login or register an account
 
 ## Contributions
 
-- GROUP 6
+GROUP 6
 - Alvi Aziz - 
 - Usman Sheikh -
 - Nathan Vazquez - 
