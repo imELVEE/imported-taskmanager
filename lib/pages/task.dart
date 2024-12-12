@@ -211,7 +211,7 @@ class TaskPageState extends State<TaskPage> {
         final response = await http.post(
           url,
           headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(newTask.toJson()),
+          body: jsonEncode(newTask.toTaskJson()),
         );
         setState(() {});
 
@@ -224,17 +224,6 @@ class TaskPageState extends State<TaskPage> {
         throw Exception('Task5: Error fetching tasks: $e');
       }
     }
-  }
-
-  // Update existing task
-  TaskAssignment _updateTask(TaskAssignment updatedTask) {
-    setState(() {
-      final index = tasks.indexWhere((task) => task.id == updatedTask.id);
-      if (index != -1) {
-        tasks[index] = updatedTask;
-      }
-    });
-    return updatedTask;
   }
 
   Future<TaskAssignment?> _updateTaskInformation(TaskAssignment task) async{
@@ -253,7 +242,6 @@ class TaskPageState extends State<TaskPage> {
     }
     else {
       await updateTaskInDB(updatedTask);
-      setState(() {});
       return updatedTask;
     }
   }
@@ -265,7 +253,7 @@ class TaskPageState extends State<TaskPage> {
       final url = Uri.parse('https://planner-appimage-823612132472.us-central1.run.app/tasks');
 
       try {
-        Map<String, dynamic> taskJson = updatedTask.toJson();
+        Map<String, dynamic> taskJson = updatedTask.toTaskJson();
         taskJson['assignment_id'] = updatedTask.id;
         final response = await http.patch(
           url,
@@ -326,7 +314,7 @@ class TaskPageState extends State<TaskPage> {
     });
   }
 
-  void _setSubtasksCompletion(String parentId, bool completed) {
+  void _setSubtasksCompletion(String parentId, bool completed) async{
     // Find all tasks whose parentId matches parentId
     final childTasks = tasks.where((t) => t.parentId == parentId).toList();
 
@@ -344,7 +332,7 @@ class TaskPageState extends State<TaskPage> {
           completeDate: completed ? DateTime.now() : null,
           parentId: tasks[index].parentId,
         );
-        updateTaskInDB(tasks[index]);
+        await updateTaskInDB(tasks[index]);
       }
 
       // Recursively update this child's subtasks
@@ -374,7 +362,6 @@ class TaskPageState extends State<TaskPage> {
     }
     else {
       await addTaskToDB(newSubtask);
-      setState(() {});
       return newSubtask;
     }
   }

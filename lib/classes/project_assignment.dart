@@ -23,12 +23,12 @@ class ProjectAssignment {
 
   factory ProjectAssignment.fromJson(Map<String, dynamic> json) {
     return ProjectAssignment(
-      id: json['id'] as String,
-      createDate: DateTime.parse(json['createDate'] as String),
+      id: json['assignment_id'] as String,
+      createDate: DateTime.parse(json['create_date'] as String),
       subject: json['subject'] as String,
       notes: json['notes'] as String?,
-      dueDate: json['dueDate'] != null ? DateTime.parse(json['dueDate'] as String) : null,
-      completeDate: json['completeDate'] != null ? DateTime.parse(json['completeDate'] as String) : null,
+      dueDate: json['due_date'] != null ? DateTime.parse(json['due_date'] as String) : null,
+      completeDate: json['completed_date'] != null ? DateTime.parse(json['completed_date'] as String) : null,
       completed: json['completed'] as bool? ?? false,
     );
   }
@@ -36,11 +36,11 @@ class ProjectAssignment {
   Map<String, dynamic> toJson() {
     return {
       'email': FirebaseAuth.instance.currentUser?.email,
-      'createDate': createDate.toIso8601String(),
+      'create_date': createDate.toIso8601String(),
       'subject': subject,
       'notes': notes,
-      'dueDate': dueDate?.toIso8601String(),
-      'completeDate': completeDate?.toIso8601String(),
+      'due_date': dueDate?.toIso8601String(),
+      'completed_date': completeDate?.toIso8601String(),
       'completed': completed,
     };
   }
