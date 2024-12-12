@@ -20,10 +20,10 @@ This andriod app allows you to sign in using google login or register an account
 
 ## Contributions
 GROUP 6
-- Alvi Aziz - TaskPage and ProjecPage,connecting to database, app deployment, Figma
+- Alvi Aziz - TaskPage,ProjecPage, Navigation, Connecting to database, app deployment, Figma
 - Usman Sheikh - HomePage, FaceBook Authentication
-- Nathan Vazquez - Backend, Database Setup, app deployment, Figma
-- XiaoMin Chen - Google and Email Authentication,support page, Figma
+- Nathan Vazquez - Create and deploy Backend, Create and deploy Database, app deployment, Figma
+- XiaoMin Chen - Google and Email Authentication,SupportPage,login/logout/register page,Figma
 
 This Project has some history that was not full imported from a previous repository (as we did not have access to this offical one).
 
