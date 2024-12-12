@@ -1,4 +1,6 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 class TaskAssignment {
   String id;
   DateTime createDate;
@@ -57,14 +59,14 @@ class TaskAssignment {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'email': FirebaseAuth.instance.currentUser?.email,
       'createDate': createDate.toIso8601String(),
       'subject': subject,
       'notes': notes,
       'dueDate': dueDate?.toIso8601String(),
       'completeDate': completeDate?.toIso8601String(),
       'completed': completed,
-      'parentId': parentId,
+      'parent_task': parentId,
     };
   }
 }

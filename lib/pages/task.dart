@@ -85,7 +85,7 @@ class TaskPageState extends State<TaskPage> {
           }),
         );
 
-        print('Task5: ${response.body}');
+        //print('Task5: ${response.body}');
         if (response.statusCode == 200) {
           return parseTasksFromJson(response.body);
         } else {
@@ -196,11 +196,34 @@ class TaskPageState extends State<TaskPage> {
   }
 
   // Add new task to the list
-  TaskAssignment _addTask(TaskAssignment newTask) {
-    setState(() {
-      tasks.add(newTask);
-    });
+  TaskAssignment _addTask(TaskAssignment newTask){
+    addTaskToDB(newTask);
     return newTask;
+  }
+
+  Future<void> addTaskToDB(TaskAssignment newTask) async {
+    final FirebaseAuth _fireAuth = FirebaseAuth.instance;
+
+    if (_fireAuth.currentUser != null) {
+      final url = Uri.parse('https://planner-appimage-823612132472.us-central1.run.app/tasks');
+
+      try {
+        final response = await http.post(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(newTask.toJson()),
+        );
+        setState(() {});
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print('Task5: ${response.body}');
+        } else {
+          throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Task5: Error fetching tasks: $e');
+      }
+    }
   }
 
   // Update existing task
@@ -220,7 +243,7 @@ class TaskPageState extends State<TaskPage> {
       builder: (context) {
         return TaskForm(
           task: task,
-          onSave: _updateTask,
+          onSave: (updatedTask) {return updatedTask;},
         );
       },
     );
@@ -229,47 +252,77 @@ class TaskPageState extends State<TaskPage> {
       return null;
     }
     else {
+      await updateTaskInDB(updatedTask);
+      setState(() {});
       return updatedTask;
     }
   }
 
-  void _deleteTask(TaskAssignment taskToDelete) {
-    setState(() {
-      tasks.removeWhere((task) => task.id == taskToDelete.id);
-      _deleteSubtasksRecursively(taskToDelete.id);
-    });
-  }
+  Future<void> updateTaskInDB(TaskAssignment updatedTask) async {
+    final FirebaseAuth _fireAuth = FirebaseAuth.instance;
 
-  void _deleteSubtasksRecursively(String parentId) {
-    // Find all subtasks with the given parentId
-    final childTasks = tasks.where((task) => task.parentId == parentId).toList();
+    if (_fireAuth.currentUser != null) {
+      final url = Uri.parse('https://planner-appimage-823612132472.us-central1.run.app/tasks');
 
-    for (final subtask in childTasks) {
-      // Remove the subtask
-      tasks.remove(subtask);
+      try {
+        Map<String, dynamic> taskJson = updatedTask.toJson();
+        taskJson['assignment_id'] = updatedTask.id;
+        final response = await http.patch(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(taskJson),
+        );
+        setState(() {});
 
-      // Recursively remove its subtasks
-      _deleteSubtasksRecursively(subtask.id);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print('Task5: ${response.body}');
+        } else {
+          throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Task5: Error fetching tasks: $e');
+      }
     }
   }
 
-  void _toggleTaskCompletion(TaskAssignment task, bool? value) {
-    setState(() {
-      final index = tasks.indexWhere((t) => t.id == task.id);
-      if (index != -1) {
-        tasks[index] = TaskAssignment(
-          id: tasks[index].id,
-          createDate: tasks[index].createDate,
-          dueDate: tasks[index].dueDate,
-          subject: tasks[index].subject,
-          notes: tasks[index].notes,
-          completed: value ?? false,
-          completeDate: value ?? false ? DateTime.now() : null,
-          parentId: tasks[index].parentId,
-        );
-      }
+  void _deleteTask(TaskAssignment taskToDelete) async {
+    await deleteTaskFromDB(taskToDelete);
+    setState(() {});
+  }
 
-      _setSubtasksCompletion(tasks[index].id, value ?? false);
+  Future<void> deleteTaskFromDB(TaskAssignment taskToDelete) async {
+    final FirebaseAuth _fireAuth = FirebaseAuth.instance;
+
+    if (_fireAuth.currentUser != null) {
+      final url = Uri.parse('https://planner-appimage-823612132472.us-central1.run.app/tasks');
+
+      try {
+        final response = await http.delete(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'assignment_id': taskToDelete.id,
+          }),
+        );
+
+        print('Task5: task id was: ${taskToDelete.id}');
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print('Task5: ${response.body}');
+        } else {
+          throw Exception('Task5: Failed to fetch tasks. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Task5: Error fetching tasks: $e');
+      }
+    }
+  }
+
+  void _toggleTaskCompletion(TaskAssignment task, bool? value) async{
+    task.completed = value ?? false;
+    task.completeDate = value ?? false ? DateTime.now() : null;
+    await updateTaskInDB(task);
+    setState(() {
+      _setSubtasksCompletion(task.id, value ?? false);
     });
   }
 
@@ -291,6 +344,7 @@ class TaskPageState extends State<TaskPage> {
           completeDate: completed ? DateTime.now() : null,
           parentId: tasks[index].parentId,
         );
+        updateTaskInDB(tasks[index]);
       }
 
       // Recursively update this child's subtasks
@@ -307,11 +361,8 @@ class TaskPageState extends State<TaskPage> {
       builder: (context) {
         return TaskForm(
           onSave: (newSubtask) {
-            setState(() {
-              // Assign parentId to link it as a subtask
-              newSubtask.parentId = parentTask.id;
-              tasks.add(newSubtask);
-            });
+            newSubtask.parentId = parentTask.id;
+            tasks.add(newSubtask);
             return newSubtask;
           },
         );
@@ -322,6 +373,8 @@ class TaskPageState extends State<TaskPage> {
       return null;
     }
     else {
+      await addTaskToDB(newSubtask);
+      setState(() {});
       return newSubtask;
     }
   }
@@ -333,7 +386,7 @@ class TaskPageState extends State<TaskPage> {
       builder: (context) {
         return TaskForm(
           task: subtask,
-          onSave: _updateTask,
+          onSave: (updatedTask) {return updatedTask;},
         );
       },
     );
@@ -342,15 +395,16 @@ class TaskPageState extends State<TaskPage> {
       return null;
     }
     else {
+      await updateTaskInDB(subtask);
+      setState((){});
       return updatedSubtask;
     }
   }
 
   // Delete a subtask
-  void _deleteSubtask(TaskAssignment subtaskToDelete) {
-    setState(() {
-      tasks.removeWhere((task) => task.id == subtaskToDelete.id);
-    });
+  void _deleteSubtask(TaskAssignment subtaskToDelete) async{
+    await deleteTaskFromDB(subtaskToDelete);
+    setState(() {});
   }
 
   PreferredSizeWidget _topAppBar(){
