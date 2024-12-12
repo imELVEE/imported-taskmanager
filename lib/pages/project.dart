@@ -8,7 +8,9 @@ import 'package:planner_app/pages/support.dart';
 import 'package:planner_app/pages/task.dart';
 import 'package:planner_app/widgets/project_form.dart';
 import 'package:planner_app/widgets/task_form.dart';
-import '../widgets/projects_list.dart';
+import 'package:planner_app/widgets/projects_list.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class ProjectPage extends StatefulWidget{
   const ProjectPage({super.key});
@@ -21,38 +23,144 @@ class ProjectPageState extends State<ProjectPage> {
   int _currentIndex = 0;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  List<ProjectAssignment> projects = [
-    ProjectAssignment(
-      id: '1',
-      createDate: DateTime.now(),
-      dueDate: DateTime.now().add(const Duration(hours: 24)),
-      subject: 'Flutter Project',
-      notes: 'Do Mobile App',
-    ),
-    ProjectAssignment(
-      id: '2',
-      createDate: DateTime.now().subtract(const Duration(hours: 8)),
-      dueDate: DateTime.now().add(const Duration(hours: 36)),
-      subject: 'Some Project 2',
-    ),
-    ProjectAssignment(
-      id: '3',
-      createDate: DateTime.now().subtract(const Duration(hours: 39)),
-      dueDate: DateTime.now().add(const Duration(hours: 12)),
-      subject: 'Some Project 3',
-      completed: true,
-      notes: 'Do Something.',
-    ),
-  ];
+  List<ProjectAssignment> projects = [];
+  List<TaskAssignment> allTasks = [];
 
-  List<TaskAssignment> allTasks = [
-    TaskAssignment(
-        id: '14',
-        createDate: DateTime.now(),
-        subject: 'subtask under prj',
-        parentId: '1',
-    )
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _fetchAndSetData(); // Initialize future in `initState`
+  }
+
+  Future<Map<String, dynamic>> _fetchData() async {
+    try {
+      final results  = await Future.wait([
+        fetchProjects(),
+        fetchTasks(),
+      ]);
+
+      return {
+        'projects': results[0] as List<ProjectAssignment>,
+        'tasks': results[1] as List<TaskAssignment>,
+      };
+    } catch (e) {
+      throw Exception('Error fetching data: $e');
+    }
+  }
+
+  // Combined fetch for projects and tasks
+  Future<void> _fetchAndSetData() async {
+    try {
+      final fetchedData = await _fetchData();
+
+      setState(() {
+        projects = fetchedData[0] as List<ProjectAssignment>;
+        allTasks = fetchedData[1] as List<TaskAssignment>;
+      });
+
+    } catch (e) {
+      throw Exception('Error fetching data: $e');
+    }
+  }
+
+  Future<List<ProjectAssignment>> fetchProjects() async {
+    final FirebaseAuth _fireAuth = FirebaseAuth.instance;
+
+    if (_fireAuth.currentUser != null) {
+      final url = Uri.parse('https://planner-appimage-823612132472.us-central1.run.app/assignments');
+
+      try {
+        final response = await http.post(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'email': _fireAuth.currentUser?.email,
+            'assignment_type': 'Projects',
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          return parseProjectsFromJson(response.body);
+        } else {
+          throw Exception('Failed to fetch projects. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Error fetching projects: $e');
+      }
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<TaskAssignment>> fetchTasks() async {
+    final FirebaseAuth _fireAuth = FirebaseAuth.instance;
+
+    if (_fireAuth.currentUser != null) {
+      final url = Uri.parse('https://planner-appimage-823612132472.us-central1.run.app/assignments');
+
+      try {
+        final response = await http.post(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'email': _fireAuth.currentUser?.email,
+            'assignment_type': 'Tasks',
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          return parseTasksFromJson(response.body);
+        } else {
+          throw Exception('Failed to fetch tasks. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Error fetching tasks: $e');
+      }
+    } else {
+      return [];
+    }
+  }
+
+  List<ProjectAssignment> parseProjectsFromJson(String jsonString) {
+    final dynamic outerDecoded = jsonDecode(jsonString);
+    final List<dynamic> jsonData = outerDecoded is String
+        ? jsonDecode(outerDecoded)
+        : outerDecoded;
+
+    return jsonData.map((item) {
+      final map = item as Map<String, dynamic>;
+      return ProjectAssignment(
+        id: map['assignment_id'] ?? '',
+        createDate: DateTime.tryParse(map['create_date'] ?? '') ?? DateTime.now(),
+        dueDate: map['due_date'] != null ? DateTime.tryParse(map['due_date']) : null,
+        subject: map['subject'] ?? 'No Subject',
+        notes: map['notes'] ?? '',
+        completed: map['completed'] ?? false,
+        completeDate: map['completed_date'],
+      );
+    }).toList();
+  }
+
+  List<TaskAssignment> parseTasksFromJson(String jsonString) {
+    final dynamic outerDecoded = jsonDecode(jsonString);
+    final List<dynamic> jsonData = outerDecoded is String
+        ? jsonDecode(outerDecoded)
+        : outerDecoded;
+
+    return jsonData.map((item) {
+      final map = item as Map<String, dynamic>;
+      return TaskAssignment(
+        id: map['assignment_id'] ?? '',
+        createDate: DateTime.tryParse(map['create_date'] ?? '') ?? DateTime.now(),
+        dueDate: map['due_date'] != null ? DateTime.tryParse(map['due_date']) : null,
+        subject: map['subject'] ?? 'No Subject',
+        notes: map['notes'] ?? '',
+        completed: map['completed'] ?? false,
+        completeDate: null,
+        parentId: null,
+      );
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context){
@@ -72,17 +180,57 @@ class ProjectPageState extends State<ProjectPage> {
           ),
         ),
       )
-      : ProjectsList(
-        projects: projects,
-        allTasks: allTasks,
-        onProjectUpdate: _updateProjectInformation,
-        onDelete: _deleteProject,
+      : FutureBuilder<Map<String, dynamic>>(
+        future: _fetchData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator(color: Colors.blue));
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Error: ${snapshot.error}',
+                style: const TextStyle(color: Colors.red, fontSize: 18),
+              ),
+            );
+          } else if (snapshot.hasData) {
+            final projects = snapshot.data!['projects'] as List<ProjectAssignment>;
+            final allTasks = snapshot.data!['tasks'] as List<TaskAssignment>;
 
-        onAddTask: _addTaskToProject,
-        onToggleTaskCompletion: _toggleTaskCompletion,
-        onEditTask: _editTask,
-        onDeleteTask: _deleteTask,
-        onToggleProjectCompletion: _toggleProjectCompletion,
+            if (projects.isEmpty) {
+              return const Center(
+                child: Text(
+                  "No projects available.",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            }
+
+            return ProjectsList(
+              projects: projects,
+              allTasks: allTasks,
+              onProjectUpdate: _updateProjectInformation,
+              onDelete: _deleteProject,
+              onAddTask: _addTaskToProject,
+              onToggleTaskCompletion: _toggleTaskCompletion,
+              onEditTask: _editTask,
+              onDeleteTask: _deleteTask,
+              onToggleProjectCompletion: _toggleProjectCompletion,
+            );
+          } else {
+            return const Center(
+              child: Text(
+                "No projects available.",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            );
+          }
+        },
       ),
       floatingActionButton: _auth.currentUser == null
       ? null
@@ -106,10 +254,33 @@ class ProjectPageState extends State<ProjectPage> {
   }
 
   // Add new project to the list
-  void _addProject(ProjectAssignment newProject) {
-    setState(() {
-      projects.add(newProject);
-    });
+  void _addProject(ProjectAssignment newProject) async {
+    await addProjectToDB(newProject);
+  }
+
+  Future<void> addProjectToDB(ProjectAssignment newProject) async {
+    final FirebaseAuth _fireAuth = FirebaseAuth.instance;
+
+    if (_fireAuth.currentUser != null) {
+      final url = Uri.parse('https://planner-appimage-823612132472.us-central1.run.app/projects');
+
+      try {
+        final response = await http.post(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(newProject.toJson()),
+        );
+        setState(() {});
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print('Project5: ${response.body}');
+        } else {
+          throw Exception('Project5: Failed to fetch projects. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Project5: Error fetching projects: $e');
+      }
+    }
   }
 
   // Update existing project

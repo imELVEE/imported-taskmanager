@@ -45,8 +45,8 @@ class TaskPageState extends State<TaskPage> {
           dueDate: map['due_date'] != null ? DateTime.tryParse(map['due_date']) : null,
           subject: map['subject'] ?? 'No Subject',
           notes: map['notes'] ?? '',
-          completed: false, // Defaulting as there's no "completed" field
-          completeDate: null, // Defaulting as there's no "complete_date" field
+          completed: map['completed'] ?? false, // Defaulting as there's no "completed" field
+          completeDate: map['completed_date'], // Defaulting as there's no "complete_date" field
           parentId: null, // Defaulting as there's no "parentId" field
         );
       }).toList();
